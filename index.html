@@ -1,239 +1,68 @@
 <!doctype html>
 <html lang="tr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Solare Creative, Antalya merkezli otel ve turizm odaklı sinematik video, fotoğraf ve sosyal medya içerik stüdyosudur.">
-  <meta name="theme-color" content="#0d0d0d">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Solare Creative — Hospitality Production">
-  <meta property="og:description" content="Oteller için sinematik film, fotoğraf ve sosyal medya içerikleri.">
-  <meta property="og:url" content="https://www.solarecreative.art/">
-  <link rel="canonical" href="https://www.solarecreative.art/">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon-dark.svg">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon-dark.svg" media="(prefers-color-scheme: light)">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon-light.svg" media="(prefers-color-scheme: dark)">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <title>Solare Creative — Otel ve Turizm Prodüksiyonu</title>
-  <style>
-    :root {
-      --ink:#11120f; --ink-2:#171812; --ivory:#faf8f5; --stone:#c1bbae;
-      --line:rgba(250,248,245,.13); --glass:rgba(17,18,15,.76); --lime:#a6b18a;
-      --serif:"Cormorant Garamond",serif; --sans:"DM Sans",sans-serif;
-      --radius:28px; --max:1240px;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth;scroll-padding-top:110px}
-    body{background:var(--ink);color:var(--ivory);font-family:var(--sans);overflow-x:hidden}
-    body::before{content:"";position:fixed;inset:0;z-index:-3;background:
-      radial-gradient(circle at 15% 12%,rgba(166,177,138,.10),transparent 28%),
-      radial-gradient(circle at 88% 36%,rgba(232,223,208,.08),transparent 30%),
-      linear-gradient(150deg,#0d0d0d 12%,#121310 52%,#0d0d0d 88%)}
-    body::after{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.22;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")}
-    a{color:inherit} button{font:inherit} img{max-width:100%;display:block}
-    .skip{position:fixed;left:20px;top:-80px;z-index:300;background:var(--lime);color:var(--ink);padding:12px 18px;border-radius:999px}
-    .skip:focus{top:18px}
-    .shell{width:min(calc(100% - 48px),var(--max));margin-inline:auto}
-    .eyebrow{color:var(--lime);font-size:11px;letter-spacing:.34em;text-transform:uppercase;font-weight:600}
-    .section{padding:120px 0;border-top:1px solid rgba(250,248,245,.06)}
-    .parallax{isolation:isolate;overflow:hidden;contain:paint}
-    .parallax::before{content:"";position:absolute;inset:-10% 0;z-index:-1;background-image:linear-gradient(rgba(17,18,15,.48),rgba(17,18,15,.58)),var(--section-image);background-size:cover;background-position:center;background-repeat:no-repeat;transform:translate3d(0,var(--parallax-y,0px),0) scale(1.10);filter:saturate(.82) contrast(.96);will-change:transform}
-    .section-head{display:grid;grid-template-columns:.6fr 1.4fr;gap:32px;align-items:end;margin-bottom:64px}
-    h1,h2,h3{font-family:var(--serif);font-weight:400}
-    h2{font-size:clamp(48px,7vw,84px);line-height:.98;letter-spacing:-.03em}
-    .lede{color:var(--stone);font-size:clamp(17px,2vw,21px);line-height:1.7;max-width:690px}
-    .button{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:54px;padding:0 25px;border:1px solid var(--line);border-radius:999px;text-decoration:none;text-transform:uppercase;letter-spacing:.15em;font-size:11px;font-weight:600;transition:.3s ease}
-    .button:hover,.button:focus-visible{border-color:var(--lime);transform:translateY(-2px)}
-    .button.primary{background:var(--lime);color:var(--ink);border-color:var(--lime)}
-    .button.primary:hover,.button.primary:focus-visible{box-shadow:0 12px 42px rgba(166,177,138,.20)}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Solare Creative — Sinematik Otel ve Turizm Prodüksiyonu</title>
+    <meta name="description" content="Solare Creative, Antalya merkezli sinematik otel prodüksiyon stüdyosudur. Oteller, resortlar ve lüks destinasyonlar için film, drone, sosyal içerik ve AI destekli prodüksiyon." />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#0b0b09" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="canonical" href="https://www.solarecreative.art/" />
+    <link rel="alternate" hreflang="tr" href="https://www.solarecreative.art/" />
+    <link rel="alternate" hreflang="en" href="https://www.solarecreative.art/en/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    header{position:fixed;inset:22px 0 auto;z-index:100}
-    .nav{width:min(calc(100% - 32px),1100px);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:26px;padding:11px 14px 11px 24px;border:1px solid var(--line);border-radius:999px;background:var(--glass);backdrop-filter:blur(22px);box-shadow:0 14px 50px rgba(0,0,0,.28)}
-    .brand{font-family:var(--serif);font-size:23px;letter-spacing:.18em;text-decoration:none;white-space:nowrap}.brand span{color:var(--lime)}
-    .brand-logo{display:block;flex-shrink:0;line-height:0}.brand-logo img{width:130px;height:auto}
-    @media(max-width:680px){.brand-logo img{width:105px}.nav{gap:12px}}
-    .nav-links{display:flex;align-items:center;gap:28px;list-style:none}.nav-links a{text-decoration:none;color:var(--stone);font-size:11px;letter-spacing:.14em;text-transform:uppercase}.nav-links a:hover,.nav-links a:focus-visible{color:var(--ivory)}
-    .nav-actions{display:flex;align-items:center;gap:9px}.lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px}.lang button{width:35px;height:34px;border:0;border-radius:999px;background:transparent;color:var(--stone);cursor:pointer;font-size:10px;font-weight:600}.lang button.active{background:var(--ivory);color:var(--ink)}
-    .nav-cta{min-height:40px;padding-inline:17px}.menu-toggle{display:none;width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:transparent;color:var(--ivory);cursor:pointer}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Solare Creative" />
+    <meta property="og:title" content="Solare Creative — Sinematik Otel ve Turizm Prodüksiyonu" />
+    <meta property="og:description" content="Oteller, resortlar ve lüks destinasyonlar için ışıltılı görsel hikâyeler." />
+    <meta property="og:url" content="https://www.solarecreative.art/" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:image" content="https://www.solarecreative.art/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Solare Creative — Sinematik Otel ve Turizm Prodüksiyonu" />
+    <meta name="twitter:description" content="Oteller, resortlar ve lüks destinasyonlar için ışıltılı görsel hikâyeler." />
+    <meta name="twitter:image" content="https://www.solarecreative.art/og.png" />
 
-    .hero{min-height:100svh;display:flex;align-items:center;padding:150px 0 74px;position:relative}
-    .hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:72px;align-items:end}
-    .hero h1{font-size:clamp(67px,10vw,136px);line-height:.82;letter-spacing:-.055em;margin:28px 0 34px;max-width:920px}.hero h1 em{color:var(--lime);font-weight:400}
-    .hero-copy{max-width:590px;color:var(--stone);font-size:19px;line-height:1.7}
-    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:38px}
-    .hero-side{border:1px solid var(--line);border-radius:var(--radius);padding:30px;background:linear-gradient(180deg,rgba(17,18,15,.14),rgba(17,18,15,.78)),url('assets/hero-pool.webp') center/cover;min-height:310px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
-    .hero-side::before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle,rgba(166,177,138,.14),transparent 60%);transform:translate(25%,25%)}
-    .hero-side>*{position:relative}.showreel-mark{width:78px;height:78px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;font-size:26px;color:var(--lime)}
-    .hero-side small{color:var(--stone);font-size:12px;letter-spacing:.18em;text-transform:uppercase}.hero-side strong{font-family:var(--serif);font-size:36px;font-weight:400;line-height:1.05;display:block;margin-top:10px}
-    .proof{display:grid;grid-template-columns:repeat(3,1fr);margin-top:56px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:rgba(13,13,13,.36)}
-    .proof div{padding:20px 24px;border-right:1px solid var(--line)}.proof div:last-child{border-right:0}.proof b{display:block;font-family:var(--serif);font-size:25px;font-weight:400}.proof span{color:var(--stone);font-size:12px}
-
-    .service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.service{min-height:360px;padding:34px;border:1px solid var(--line);border-radius:var(--radius);background:rgba(250,248,245,.025);display:flex;flex-direction:column;transition:.35s ease}.service:hover{transform:translateY(-6px);background:rgba(250,248,245,.045)}
-    .service-no{color:var(--lime);font-family:var(--serif);font-size:17px}.service h3{font-size:clamp(34px,4vw,50px);line-height:1;margin:auto 0 24px}.service p{color:var(--stone);line-height:1.7;font-size:15px}
-
-    .work-grid{display:grid;grid-template-columns:1.35fr .65fr;grid-template-rows:repeat(2,300px);gap:14px}.work-card{border:1px solid var(--line);border-radius:var(--radius);padding:28px;position:relative;overflow:hidden;background-image:linear-gradient(180deg,rgba(17,18,15,.10),rgba(17,18,15,.88)),var(--card-image);background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:space-between;text-decoration:none}.work-card:first-child{grid-row:1/3}.work-card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 75% 25%,rgba(166,177,138,.13),transparent 36%);transition:.45s}.work-card:hover::before{transform:scale(1.25)}.work-card>*{position:relative}.work-status{display:flex;justify-content:space-between;gap:16px;color:var(--ivory);font-size:10px;letter-spacing:.15em;text-transform:uppercase;text-shadow:0 1px 10px rgba(0,0,0,.8)}.work-card h3{font-size:clamp(36px,5vw,65px);line-height:.95;margin-bottom:12px;text-shadow:0 3px 24px rgba(0,0,0,.75)}.work-card p{color:var(--ivory);font-size:14px;line-height:1.6;max-width:410px;text-shadow:0 2px 16px rgba(0,0,0,.8)}.media-slot{width:86px;height:86px;border-radius:50%;border:1px solid rgba(250,248,245,.36);background:rgba(17,18,15,.28);backdrop-filter:blur(8px);display:grid;place-items:center;color:var(--lime);font-size:25px;margin-left:auto}
-    .section-head-left{grid-template-columns:1fr;text-align:left}
-    .work-card{padding:22px;justify-content:flex-end;gap:12px;background-image:linear-gradient(180deg,rgba(17,18,15,.02) 35%,rgba(17,18,15,.78) 100%),var(--card-image)}
-    .work-card h3{font-size:clamp(25px,2.3vw,34px);line-height:1.08;margin-bottom:7px}
-    .work-card p{font-size:12px;line-height:1.5;max-width:340px}
-    .work-status{justify-content:flex-start;flex-wrap:wrap;gap:6px 14px;font-size:9px;letter-spacing:.1em;line-height:1.5}
-    .media-slot{position:absolute;top:22px;right:22px;width:48px;height:48px;font-size:16px}
-    .footer-row{flex-direction:column;align-items:center;text-align:center}
-    .footer-contact{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 24px}
-    @media(max-width:680px){.work-card{padding:20px}.work-card h3{font-size:27px}.work-card p{font-size:12px;max-width:290px}.footer-contact{flex-direction:column}}
-    .work-note{margin-top:18px;color:var(--stone);font-size:13px}.work-note strong{color:var(--ivory)}
-
-    .process{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}.step{padding:34px;min-height:250px;border-right:1px solid var(--line)}.step:last-child{border:0}.step b{color:var(--lime);font-family:var(--serif);font-size:18px}.step h3{font-size:32px;margin:50px 0 14px}.step p{color:var(--stone);font-size:14px;line-height:1.65}
-
-    .about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:90px;align-items:start}.about-quote{font-size:clamp(48px,6vw,78px);line-height:1}.about-quote em{color:var(--lime)}.about-copy p{color:var(--stone);line-height:1.85;margin-bottom:22px}.about-copy .button{margin-top:12px}
-
-    .contact-card{padding:clamp(34px,7vw,86px);border:1px solid var(--line);border-radius:calc(var(--radius) + 8px);background:linear-gradient(140deg,rgba(250,248,245,.07),rgba(166,177,138,.05));text-align:center}.contact-card h2{max-width:850px;margin:24px auto 22px}.contact-card .lede{margin-inline:auto}.contact-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:36px}.contact-meta{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:28px;color:var(--stone);font-size:13px}.contact-meta a{text-decoration:none}.contact-meta a:hover{color:var(--ivory)}
-    footer{padding:34px 0 50px}.footer-row{display:flex;justify-content:space-between;gap:24px;color:var(--stone);font-size:12px}.footer-row a{text-decoration:none}
-
-    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:none}
-    @media(max-width:980px){
-      .nav-links,.nav-cta{display:none}.menu-toggle{display:grid;place-items:center}.nav.open{border-radius:26px;align-items:flex-start;flex-wrap:wrap}.nav.open .nav-links{display:flex;order:3;width:100%;flex-direction:column;align-items:stretch;gap:0;padding:10px 0}.nav.open .nav-links a{display:block;padding:14px 4px;font-size:13px}.nav.open .nav-cta{display:inline-flex;order:4;margin-bottom:5px}.hero-grid,.about-grid{grid-template-columns:1fr}.hero-side{min-height:240px}.service-grid{grid-template-columns:1fr}.service{min-height:290px}.process{grid-template-columns:repeat(2,1fr)}.step:nth-child(2){border-right:0}.step:nth-child(-n+2){border-bottom:1px solid var(--line)}
-    }
-    @media(max-width:680px){
-      .shell{width:min(calc(100% - 28px),var(--max))}.section{padding:86px 0}.section-head{grid-template-columns:1fr;margin-bottom:42px}.hero{padding-top:132px}.hero h1{font-size:clamp(61px,20vw,92px)}.hero-copy{font-size:17px}.hero-actions .button{width:100%}.proof{grid-template-columns:1fr}.proof div{border-right:0;border-bottom:1px solid var(--line)}.proof div:last-child{border-bottom:0}.work-grid{grid-template-columns:1fr;grid-template-rows:none}.work-card,.work-card:first-child{grid-row:auto;min-height:330px}.process{grid-template-columns:1fr}.step{border-right:0;border-bottom:1px solid var(--line)!important;min-height:220px}.step:last-child{border-bottom:0!important}.footer-row{flex-direction:column}.lang{margin-left:auto}.nav{padding-left:18px;gap:12px}.contact-meta{flex-direction:column;gap:10px}
-    }
-    /* Approved typography from the separate comparison. */
-    h1,h2,h3,.hero h1,.service h3,.work-card h3,.about-quote{font-weight:300;line-height:.98;letter-spacing:-.025em}
-    .hero h1 em{font-weight:300}
-    p{font-weight:300}
-    .eyebrow{font-weight:500;letter-spacing:.1em}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}*{animation:none!important}}
-  </style>
-</head>
-<body>
-  <a class="skip" href="#main" data-tr="İçeriğe geç" data-en="Skip to content">İçeriğe geç</a>
-  <header>
-    <nav class="nav" aria-label="Ana menü">
-      <a class="brand brand-logo" href="#top" aria-label="Solare Creative"><img src="assets/solare-logo-white.svg" alt="Solare Creative" width="320" height="119"></a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#services" data-tr="Hizmetler" data-en="Services">Hizmetler</a></li>
-        <li><a href="#work" data-tr="Projeler" data-en="Work">Projeler</a></li>
-        <li><a href="#process" data-tr="Süreç" data-en="Process">Süreç</a></li>
-        <li><a href="#about" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
-      </ul>
-      <div class="nav-actions">
-        <div class="lang" aria-label="Dil seçimi">
-          <button class="active" type="button" data-lang="tr" aria-pressed="true">TR</button>
-          <button type="button" data-lang="en" aria-pressed="false">EN</button>
-        </div>
-        <a class="button nav-cta" href="https://wa.me/905051562376?text=Merhaba%20Solare%20Creative%2C%20bir%20proje%20hakk%C4%B1nda%20g%C3%B6r%C3%BC%C5%9Fmek%20istiyorum." target="_blank" rel="noopener" data-tr="WhatsApp" data-en="WhatsApp">WhatsApp</a>
-        <button class="menu-toggle" type="button" aria-controls="navLinks" aria-expanded="false" aria-label="Menüyü aç">☰</button>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Solare Creative",
+        "description": "Cinematic hospitality production: hotel films, FPV drone, social content and AI production.",
+        "url": "https://www.solarecreative.art/",
+        "email": "hello@solarecreative.art",
+        "address": { "@type": "PostalAddress", "addressLocality": "Antalya", "addressCountry": "TR" },
+        "sameAs": ["https://www.instagram.com/solarecreative.art/"],
+        "areaServed": "Worldwide"
+      }
+    </script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #0b0b09;
+        color: #faf8f5;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <div style="max-width: 640px; margin: 12vh auto; padding: 0 24px; font-family: Georgia, serif; line-height: 1.6">
+        <h1>Solare Creative</h1>
+        <p>Sinematik Otel Prodüksiyonu — Antalya, Türkiye. Atmosferi yakalıyoruz.</p>
+        <p>Solare Creative crafts luminous visual stories for the world's most prestigious hotels, resorts, and luxury destinations.</p>
+        <p>Bu deneyim JavaScript gerektirir. / This experience requires JavaScript.</p>
+        <p>
+          <a href="mailto:hello@solarecreative.art" style="color: #e8b56a">hello@solarecreative.art</a> ·
+          <a href="https://www.instagram.com/solarecreative.art/" style="color: #e8b56a">Instagram</a>
+        </p>
       </div>
-    </nav>
-  </header>
-
-  <main id="main">
-    <section class="hero parallax" id="top" style="--section-image:url('assets/hero-pool.webp')">
-      <div class="shell">
-        <div class="hero-grid">
-          <div>
-            <p class="eyebrow" data-tr="Antalya · Hospitality Production" data-en="Antalya · Hospitality Production">Antalya · Hospitality Production</p>
-            <h1 data-tr="Bazı deneyimler<br><em>anlatılmaya değer.</em>" data-en="Some experiences<br><em>deserve to be told.</em>">Bazı deneyimler<br><em>anlatılmaya değer.</em></h1>
-            <div class="hero-actions">
-              <a class="button primary" href="#work" data-tr="Projeleri gör ↘" data-en="View selected work ↘">Projeleri gör ↘</a>
-            </div>
-          </div>
-          <aside class="hero-side" aria-hidden="true"></aside>
-        </div>
-        <div class="proof" aria-label="Solare özellikleri">
-          <div><b data-tr="Otel odaklı" data-en="Hospitality-first">Otel odaklı</b><span data-tr="Sektörün ritmini bilen üretim" data-en="Production that understands the sector">Sektörün ritmini bilen üretim</span></div>
-          <div><b data-tr="Uçtan uca" data-en="End to end">Uçtan uca</b><span data-tr="Planlama, çekim ve post-prodüksiyon" data-en="Planning, production and post">Planlama, çekim ve post-prodüksiyon</span></div>
-          <div><b data-tr="Tek görsel dil" data-en="One visual language">Tek görsel dil</b><span data-tr="Film, fotoğraf ve sosyal içerik" data-en="Film, photography and social">Film, fotoğraf ve sosyal içerik</span></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section parallax" id="services" style="--section-image:url('assets/services-room.webp')">
-      <div class="shell">
-        <div class="section-head reveal"><p class="eyebrow" data-tr="Hizmetler" data-en="Services">Hizmetler</p><div><h2 data-tr="Her kare, otelinizin hikâyesini anlatır." data-en="Every frame tells your hotel’s story.">Her kare, otelinizin hikâyesini anlatır.</h2><p class="lede" data-tr="Otelinizin atmosferini, karakterini ve misafirlerine sunduğu deneyimi film, fotoğraf ve sosyal medya içerikleriyle görünür kılıyoruz." data-en="We bring your hotel’s atmosphere, character and guest experience to life through film, photography and social media content.">Otelinizin atmosferini, karakterini ve misafirlerine sunduğu deneyimi film, fotoğraf ve sosyal medya içerikleriyle görünür kılıyoruz.</p></div></div>
-        <div class="service-grid">
-          <article class="service reveal"><span class="service-no">01</span><h3 data-tr="Sinematik Otel Filmleri" data-en="Cinematic Hotel Films">Sinematik Otel Filmleri</h3><p data-tr="Odanın ışığından restoranın ritmine kadar deneyimi hikâyeye dönüştüren ana marka filmleri ve kampanya videoları." data-en="Brand films and campaign videos that turn the full guest experience—from room light to restaurant rhythm—into a story.">Odanın ışığından restoranın ritmine kadar deneyimi hikâyeye dönüştüren ana marka filmleri ve kampanya videoları.</p></article>
-          <article class="service reveal"><span class="service-no">02</span><h3 data-tr="Fotoğraf & Sosyal İçerik" data-en="Photography & Social">Fotoğraf & Sosyal İçerik</h3><p data-tr="Web sitesi, OTA, reklam ve sosyal medya için mimari, oda, gastronomi ve deneyim odaklı fotoğraf ile kısa video üretimi." data-en="Architecture, rooms, gastronomy and experience-led photography and short-form video for web, OTA, ads and social.">Web sitesi, OTA, reklam ve sosyal medya için mimari, oda, gastronomi ve deneyim odaklı fotoğraf ile kısa video üretimi.</p></article>
-          <article class="service reveal"><span class="service-no">03</span><h3 data-tr="AI Destekli Prodüksiyon" data-en="AI-Assisted Production">AI Destekli Prodüksiyon</h3><p data-tr="Gerçek prodüksiyonu tamamlayan yaratıcı varyasyonlar, konsept görseller ve kampanya uyarlamaları. Araç değil, fikir önde." data-en="Creative variations, concept visuals and campaign adaptations that extend real production. The idea leads; the tool follows.">Gerçek prodüksiyonu tamamlayan yaratıcı varyasyonlar, konsept görseller ve kampanya uyarlamaları. Araç değil, fikir önde.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section parallax" id="work" style="--section-image:url('assets/work-beach.webp')">
-      <div class="shell">
-        <div class="section-head section-head-left reveal"><div><h2 data-tr="Projeler" data-en="Projects">Projeler</h2></div></div>
-        <div class="work-grid">
-          <article class="work-card reveal" style="--card-image:url('assets/work-beach.webp')"><div class="media-slot" aria-hidden="true">▶</div><div><h3 data-tr="Otel Tanıtım Filmi" data-en="Hotel Brand Film">Otel Tanıtım Filmi</h3></div><div class="work-status"><span data-tr="Tanıtım filmi" data-en="Promotional film">Tanıtım filmi</span><span data-tr="Hospitality film" data-en="Hospitality film">Hospitality film</span></div></article>
-          <article class="work-card reveal" style="--card-image:url('assets/work-gastronomy.webp')"><div><h3 data-tr="Sosyal İçerik Serisi" data-en="Social Content Series">Sosyal İçerik Serisi</h3><p data-tr="Dikey video ve kampanya içeriği." data-en="Vertical video and campaign content.">Dikey video ve kampanya içeriği.</p></div><div class="work-status"><span data-tr="Kısa format" data-en="Short form">Kısa format</span><span data-tr="Gastronomi" data-en="Gastronomy">Gastronomi</span></div></article>
-          <article class="work-card reveal" style="--card-image:url('assets/services-room.webp')"><div><h3 data-tr="Mekân & Deneyim" data-en="Space & Experience">Mekân & Deneyim</h3><p data-tr="Oda, gastronomi ve ortak alan seçkisi." data-en="Rooms, gastronomy and shared spaces.">Oda, gastronomi ve ortak alan seçkisi.</p></div><div class="work-status"><span data-tr="Fotoğraf" data-en="Photography">Fotoğraf</span><span data-tr="Mekân" data-en="Spaces">Mekân</span></div></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section parallax" id="process" style="--section-image:url('assets/process-restaurant.webp')">
-      <div class="shell">
-        <div class="section-head section-head-left reveal"><div><h2 data-tr="Çalışma Süreci" data-en="Our Process">Çalışma Süreci</h2><p class="lede" data-tr="Projeyi ilk görüşmeden teslim aşamasına kadar planlı ve şeffaf şekilde yürütüyoruz." data-en="We manage every project through a clear and structured process, from the first meeting to final delivery.">Projeyi ilk görüşmeden teslim aşamasına kadar planlı ve şeffaf şekilde yürütüyoruz.</p></div></div>
-        <div class="process">
-          <article class="step reveal"><b>01</b><h3 data-tr="Keşif" data-en="Discovery">Keşif</h3><p data-tr="Hedef, misafir profili, sezon ve kullanılacak kanalları netleştiririz." data-en="We align on goals, guest profile, season and channels.">Hedef, misafir profili, sezon ve kullanılacak kanalları netleştiririz.</p></article>
-          <article class="step reveal"><b>02</b><h3 data-tr="Plan" data-en="Plan">Plan</h3><p data-tr="Senaryo, çekim akışı, mekân ve teslim listesini tek dokümanda toplarız." data-en="Script, shot flow, locations and deliverables are gathered in one plan.">Senaryo, çekim akışı, mekân ve teslim listesini tek dokümanda toplarız.</p></article>
-          <article class="step reveal"><b>03</b><h3 data-tr="Üretim" data-en="Production">Üretim</h3><p data-tr="Operasyonu aksatmadan çekimi, drone'u ve gerekli yönlendirmeyi yönetiriz." data-en="We manage production, drone and direction without disrupting operations.">Operasyonu aksatmadan çekimi, drone'u ve gerekli yönlendirmeyi yönetiriz.</p></article>
-          <article class="step reveal"><b>04</b><h3 data-tr="Teslim" data-en="Delivery">Teslim</h3><p data-tr="İçerikleri kullanım alanlarına göre düzenler, revize eder ve arşivleriz." data-en="We format, refine and archive assets for every intended channel.">İçerikleri kullanım alanlarına göre düzenler, revize eder ve arşivleriz.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section parallax" id="about" style="--section-image:url('assets/about-lounge.webp')">
-      <div class="shell about-grid">
-        <div class="reveal"><p class="eyebrow" data-tr="Solare yaklaşımı" data-en="The Solare approach">Solare yaklaşımı</p><h2 class="about-quote" data-tr="Her otelin kendine özgü <em>bir hikâyesi var.</em>" data-en="Every hotel has <em>a story of its own.</em>">Her otelin kendine özgü <em>bir hikâyesi var.</em></h2></div>
-        <div class="about-copy reveal"><p data-tr="Solare, Antalya merkezli bağımsız bir yaratıcı stüdyo. Otellerin mimarisinden sofra detaylarına, atmosferinden misafir deneyimine kadar kendine özgü yanlarını keşfediyor; bunları film, fotoğraf ve sosyal medya içerikleriyle anlatıyoruz." data-en="Solare is an independent creative studio based in Antalya. From architecture and table details to atmosphere and the guest experience, we discover what makes each hotel unique and tell its story through film, photography and social media content.">Solare, Antalya merkezli bağımsız bir yaratıcı stüdyo. Otellerin mimarisinden sofra detaylarına, atmosferinden misafir deneyimine kadar kendine özgü yanlarını keşfediyor; bunları film, fotoğraf ve sosyal medya içerikleriyle anlatıyoruz.</p><a class="button" href="#contact" data-tr="Birlikte çalışalım" data-en="Work with us">Birlikte çalışalım</a></div>
-      </div>
-    </section>
-
-    <section class="section" id="contact">
-      <div class="shell">
-        <div class="contact-card reveal"><p class="eyebrow" data-tr="İletişim" data-en="Contact">İletişim</p><h2 data-tr="Otelinizin hikâyesini konuşalım." data-en="Let's talk about your hotel's story.">Otelinizin hikâyesini konuşalım.</h2><p class="lede" data-tr="Kısa bir brief yeterli. İhtiyacı birlikte netleştirip uygun üretim kapsamını çıkaralım." data-en="A short brief is enough. We'll define the need together and shape the right production scope.">Kısa bir brief yeterli. İhtiyacı birlikte netleştirip uygun üretim kapsamını çıkaralım.</p><div class="contact-actions"><a class="button primary" href="https://wa.me/905051562376?text=Merhaba%20Solare%20Creative%2C%20bir%20proje%20hakk%C4%B1nda%20g%C3%B6r%C3%BC%C5%9Fmek%20istiyorum." target="_blank" rel="noopener" data-tr="WhatsApp’tan yaz ↗" data-en="Message on WhatsApp ↗">WhatsApp’tan yaz ↗</a><a class="button" href="mailto:hello@solarecreative.art?subject=Solare%20Creative%20Proje%20Talebi" data-tr="E-posta gönder ↗" data-en="Send an email ↗">E-posta gönder ↗</a><a class="button" href="https://www.instagram.com/solarecreative.art/" target="_blank" rel="noopener" data-tr="Instagram ↗" data-en="Instagram ↗">Instagram ↗</a></div><div class="contact-meta"><a href="mailto:hello@solarecreative.art">hello@solarecreative.art</a><span data-tr="Antalya, Türkiye" data-en="Antalya, Turkey">Antalya, Türkiye</span></div></div>
-      </div>
-    </section>
-  </main>
-
-  <footer><div class="shell footer-row"><a class="brand brand-logo" href="#top" aria-label="Solare Creative"><img src="assets/solare-logo-white.svg" alt="Solare Creative" width="320" height="119"></a><span>© 2026 Solare Creative</span><div class="footer-contact"><a href="mailto:hello@solarecreative.art">hello@solarecreative.art</a><span data-tr="Antalya, Türkiye" data-en="Antalya, Turkey">Antalya, Türkiye</span></div></div></footer>
-
-  <script>
-    const nav=document.querySelector('.nav');
-    const toggle=document.querySelector('.menu-toggle');
-    toggle.addEventListener('click',()=>{const open=nav.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Menüyü kapat':'Menüyü aç');toggle.textContent=open?'×':'☰'});
-    document.querySelectorAll('.nav a').forEach(link=>link.addEventListener('click',()=>{nav.classList.remove('open');toggle.setAttribute('aria-expanded','false');toggle.textContent='☰'}));
-
-    const langButtons=document.querySelectorAll('[data-lang]');
-    function setLanguage(lang){
-      document.documentElement.lang=lang;
-      document.querySelectorAll('[data-tr][data-en]').forEach(el=>{el.innerHTML=el.dataset[lang]});
-      langButtons.forEach(btn=>{const active=btn.dataset.lang===lang;btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active))});
-      document.title=lang==='tr'?'Solare Creative — Otel ve Turizm Prodüksiyonu':'Solare Creative — Hospitality Production';
-      try{localStorage.setItem('solare-lang',lang)}catch(e){}
-    }
-    langButtons.forEach(btn=>btn.addEventListener('click',()=>setLanguage(btn.dataset.lang)));
-    let saved='tr';try{saved=localStorage.getItem('solare-lang')||'tr'}catch(e){}setLanguage(saved);
-
-    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const parallaxSections=document.querySelectorAll('.parallax');
-    let parallaxFrame;
-    function updateParallax(){
-      const factor=innerWidth<680?.05:.10;
-      parallaxSections.forEach(section=>section.style.setProperty('--parallax-y',`${section.getBoundingClientRect().top*factor}px`));
-      parallaxFrame=null;
-    }
-    if(!reduce){
-      addEventListener('scroll',()=>{if(!parallaxFrame)parallaxFrame=requestAnimationFrame(updateParallax)},{passive:true});
-      addEventListener('resize',updateParallax);updateParallax();
-    }
-    if(reduce){document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'))}
-    else{
-      const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.12});
-      document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
-    }
-  </script>
-</body>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
