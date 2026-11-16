@@ -43,6 +43,9 @@ export const bridge = {
   focus: { x: 0, dist: 100 },
   /** True while the visitor is dragging a planet to turn it. */
   dragging: false,
+  /** Opening shot: playback speed (0 = not running) and linear time 0..1. */
+  introSpeed: 0,
+  introT: 0,
   /** Queue of small solar eruptions to spawn (directions in the sun's object space). */
   eruptions: [] as Vector3[],
 };

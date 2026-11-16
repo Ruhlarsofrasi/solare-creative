@@ -16,14 +16,21 @@ const blank = new DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1);
 blank.needsUpdate = true;
 const loader = new TextureLoader();
 const cache = new Map<string, Texture>();
+let pending = 0;
+/** Planet maps still downloading or not yet uploaded to the GPU. */
+export const texturesPending = () => pending;
+// 4096 px maps on desktop; phones get 2048 px versions — a quarter of the GPU memory, same look at phone size
+const HAS_2K = new Set(['earth.jpg', 'jupiter.jpg', 'mars.jpg', 'venus.jpg']);
 
 /**
  * High-resolution planet maps live in /public/textures (see README for credits).
  * Replace a file there to swap a planet's surface. Textures are shared and cached.
  */
 function useMap(file: string | null, onLoad?: () => void) {
-  const max = useThree((s) => s.gl.capabilities.getMaxAnisotropy());
+  const gl = useThree((s) => s.gl);
   return useMemo(() => {
+    const mobile = useStore.getState().mobile;
+    const max = gl.capabilities.getMaxAnisotropy();
     if (!file) return blank;
     const hit = cache.get(file);
     if (hit) {
@@ -31,10 +38,31 @@ function useMap(file: string | null, onLoad?: () => void) {
       else window.setTimeout(() => onLoad?.(), 1500);
       return hit;
     }
-    const tex = loader.load(`${BASE}textures/${file}`, () => onLoad?.());
+    pending++;
+    let settled = false;
+    const settle = () => {
+      if (settled) return;
+      settled = true;
+      pending--;
+    };
+    const tex = loader.load(
+      `${BASE}textures/${mobile && HAS_2K.has(file) ? '2k/' : ''}${file}`,
+      (t) => {
+        // upload now, behind the loader, rather than as a hitch the first time the planet is seen
+        try {
+          gl.initTexture(t);
+        } catch {
+          /* uploaded on first use instead */
+        }
+        settle();
+        onLoad?.();
+      },
+      undefined,
+      settle,
+    );
     tex.colorSpace = SRGBColorSpace;
     tex.wrapS = RepeatWrapping;
-    tex.anisotropy = Math.min(8, max);
+    tex.anisotropy = Math.min(mobile ? 4 : 8, max);
     cache.set(file, tex);
     return tex;
     // eslint-disable-next-line react-hooks/exhaustive-deps

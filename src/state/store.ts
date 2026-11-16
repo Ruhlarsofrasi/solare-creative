@@ -48,6 +48,8 @@ interface State {
   qualityPref: QualityPref;
   autoTier: Tier;
   tier: Tier;
+  /** Adaptive resolution factor (1 = full tier resolution). */
+  scale: number;
   motionPref: MotionPref;
   reducedMotion: boolean;
   webgl: boolean;
@@ -100,6 +102,7 @@ export const useStore = create<State>((set, get) => ({
   qualityPref: initialQuality,
   autoTier: detected,
   tier: resolveTier(initialQuality, detected),
+  scale: 1,
   motionPref: initialMotion,
   reducedMotion: initialMotion === 'reduced' || (initialMotion === 'system' && systemReduced()),
   webgl: webglAvailable(),
@@ -154,15 +157,17 @@ export const useStore = create<State>((set, get) => ({
 
   setQuality: (q) => {
     ls.set('solare.quality', q);
-    set({ qualityPref: q, tier: resolveTier(q, get().autoTier) });
+    set({ qualityPref: q, tier: resolveTier(q, get().autoTier), scale: 1 });
   },
 
   degrade: () => {
     const s = get();
     // a backgrounded tab throttles rendering — that is not a slow GPU
-    if (s.qualityPref !== 'auto' || document.hidden || performance.now() - lastShown < 4000) return;
-    const next: Tier = s.autoTier === 'high' ? 'med' : 'low';
-    if (next !== s.autoTier) set({ autoTier: next, tier: next });
+    if (s.qualityPref === 'high' || document.hidden || performance.now() - lastShown < 4000) return;
+    // shader compilation and texture uploads right after loading are not a slow GPU either
+    if (!readyAt || performance.now() - readyAt < 2500) return;
+    // Only the resolution steps down. Switching tier would visibly change the sun and bloom.
+    if (s.scale > 0.66) set({ scale: s.scale > 0.9 ? 0.8 : 0.65 });
   },
 
   setMotion: (m) => {
@@ -178,6 +183,10 @@ export const useStore = create<State>((set, get) => ({
 }));
 
 let lastShown = 0;
+let readyAt = 0;
+useStore.subscribe((s) => {
+  if (s.ready && !readyAt) readyAt = performance.now();
+});
 if (typeof window !== 'undefined') {
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) lastShown = performance.now();

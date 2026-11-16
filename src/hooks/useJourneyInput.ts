@@ -1,37 +1,29 @@
 import { useEffect } from 'react';
-import gsap from 'gsap';
 import { planets } from '../config/planets';
 import { projectBySlug } from '../content/projects';
 import { clamp } from '../lib/math';
 import { bridge } from '../state/bridge';
 import { useStore } from '../state/store';
 
-let introTween: gsap.core.Tween | null = null;
 let lockedUntil = 0;
 
 
 /** Starts the opening pull-back (or skips it for deep links / reduced motion). */
 export function startIntro() {
   const s = useStore.getState();
-  if (s.introDone || introTween) return;
+  if (s.introDone || bridge.introSpeed > 0) return;
   if (s.route.kind !== 'home' || s.reducedMotion || !s.webgl) {
     bridge.intro = 1;
     useStore.setState({ introDone: true });
     return;
   }
-  introTween = gsap.to(bridge, {
-    intro: 1,
-    duration: 8,
-    ease: 'power2.inOut',
-    onComplete: () => {
-      introTween = null;
-      useStore.setState({ introDone: true });
-    },
-  });
+  // The pull-back is advanced by the camera rig, one rendered frame at a time:
+  // it only moves while the scene is actually on screen, so a slow start can never eat it.
+  bridge.introSpeed = 1;
 }
 
 export function skipIntro() {
-  if (introTween) introTween.timeScale(7);
+  if (bridge.introSpeed > 0) bridge.introSpeed = 7;
   else if (bridge.intro < 1) {
     bridge.intro = 1;
     useStore.setState({ introDone: true });

@@ -79,6 +79,18 @@ export function CameraRig() {
       bridge.planetPos[p.id].set(Math.cos(a) * p.orbit.radius, p.orbit.y * (1 - al), Math.sin(a) * p.orbit.radius);
     }
 
+    // ── opening shot (8 s, eased in and out) ──────────────────────────
+    if (bridge.introSpeed > 0) {
+      bridge.introT = Math.min(1, bridge.introT + (dt * bridge.introSpeed) / 8);
+      const t = bridge.introT;
+      bridge.intro = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      if (t >= 1) {
+        bridge.intro = 1;
+        bridge.introSpeed = 0;
+        useStore.setState({ introDone: true });
+      }
+    }
+
     // ── journey progress ──────────────────────────────────────────────
     bridge.progressTarget = clamp(bridge.progressTarget, 0, planets.length);
     // the target is already eased by the travel tween; this only rounds off the last edge

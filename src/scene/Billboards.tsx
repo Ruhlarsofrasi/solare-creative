@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { useFrame, type ThreeEvent } from '@react-three/fiber';
+import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import { CanvasTexture, Color, DataTexture, DoubleSide, Group, Mesh, ShaderMaterial, SRGBColorSpace, TextureLoader, Vector3, VideoTexture } from 'three';
 import { planetIndex, type PlanetConfig } from '../config/planets';
 import type { Lang } from '../config/site';
@@ -7,7 +7,7 @@ import { projectSeed, projectsOf, type Project } from '../content/projects';
 import { clamp, damp } from '../lib/math';
 import { bridge } from '../state/bridge';
 import { useStore } from '../state/store';
-import { STOP_ANGLE, STOP_DISTANCE } from './poses';
+import { STOP_ANGLE, STOP_DISTANCE, STOP_DISTANCE_PORTRAIT } from './poses';
 import { metalFragment, planetVertex } from './shaders/planets';
 import { screenFragment, screenVertex } from './shaders/screen';
 
@@ -31,11 +31,11 @@ interface Layout {
   pitch: number;
 }
 
-function layoutFor(project: Project, cfg: PlanetConfig, slot: number): Layout {
+function layoutFor(project: Project, cfg: PlanetConfig, slot: number, portrait: boolean): Layout {
   const R = cfg.radius;
-  const camPos = toCam.clone().multiplyScalar(R * STOP_DISTANCE);
+  const camPos = toCam.clone().multiplyScalar(R * (portrait ? STOP_DISTANCE_PORTRAIT : STOP_DISTANCE));
   if (project.format === 'curved') {
-    const radius = R * 2.3;
+    const radius = R * (portrait ? 1.45 : 2.3);
     const h = R * 0.52;
     const arc = 1.9;
     const face = toCam.clone().addScaledVector(camRight, -0.3);
@@ -53,6 +53,34 @@ function layoutFor(project: Project, cfg: PlanetConfig, slot: number): Layout {
   }
   let w: number;
   let h: number;
+  if (portrait) {
+    // Phone framing is tall and narrow: wide screens sit above / below the planet,
+    // vertical screens to its left / right — all inside the frame and in front of the planet's hit area.
+    const vertical = project.format === 'vertical';
+    if (vertical) {
+      h = R * 1.45;
+      w = (h * 9) / 16;
+    } else {
+      w = R * 2.5;
+      h = w / 2.35;
+    }
+    const side = slot === 0 ? -1 : 1;
+    const pos = new Vector3().addScaledVector(toCam, 1.1 * R);
+    if (vertical) pos.addScaledVector(camRight, side * 1.5 * R).addScaledVector(UP, -0.1 * R);
+    else pos.addScaledVector(UP, -side * (1.3 * R + h / 2));
+    const d = camPos.clone().sub(pos);
+    return {
+      curved: false,
+      w,
+      h,
+      aspect: w / h,
+      radius: 0,
+      arc: 0,
+      pos,
+      yaw: Math.atan2(d.x, d.z),
+      pitch: -Math.atan2(d.y, Math.hypot(d.x, d.z)),
+    };
+  }
   if (project.format === 'vertical') {
     h = R * (slot === 0 ? 2.15 : 1.85);
     w = (h * 9) / 16;
@@ -177,7 +205,8 @@ const frameColor = new Color('#1a1a18');
 
 function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetConfig; slot: number; seed: number }) {
   const lang = useStore((s) => s.lang);
-  const layout = useMemo(() => layoutFor(project, cfg, slot), [project, cfg, slot]);
+  const portrait = useThree((s) => s.size.width / s.size.height < 0.9);
+  const layout = useMemo(() => layoutFor(project, cfg, slot, portrait), [project, cfg, slot, portrait]);
   const group = useRef<Group>(null);
   const mesh = useRef<Mesh>(null);
   const hover = useRef(0);

@@ -7,7 +7,7 @@ import { ACESFilmicToneMapping, HalfFloatType } from 'three';
 import { tierSettings } from '../lib/quality';
 import { useStore } from '../state/store';
 import { CameraRig } from './CameraRig';
-import { Planets } from './Planets';
+import { Planets, texturesPending } from './Planets';
 import { Secrets } from './Secrets';
 import { Orbits, Starfield } from './Starfield';
 import { Sun } from './Sun';
@@ -25,20 +25,47 @@ class Boundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   }
 }
 
-/** Marks the scene ready once shaders are compiled and a few frames have rendered. */
+/**
+ * Marks the scene ready once every shader is compiled, the planet maps are on
+ * the GPU and a few frames have rendered — so nothing hitches during the opening shot.
+ */
 function Ready() {
   const frames = useRef(0);
+  const started = useRef(0);
   const gl = useThree((s) => s.gl);
+  const scene = useThree((s) => s.scene);
+  const camera = useThree((s) => s.camera);
   useEffect(() => {
     const el = gl.domElement;
-    const lost = (e: Event) => e.preventDefault();
+    let timer = 0;
+    const lost = (e: Event) => {
+      e.preventDefault();
+      // if the browser does not hand the context back, show the static backdrop instead of a black void
+      timer = window.setTimeout(() => useStore.setState({ webgl: false, ready: true }), 4000);
+    };
+    const restored = () => window.clearTimeout(timer);
     el.addEventListener('webglcontextlost', lost);
-    return () => el.removeEventListener('webglcontextlost', lost);
+    el.addEventListener('webglcontextrestored', restored);
+    return () => {
+      window.clearTimeout(timer);
+      el.removeEventListener('webglcontextlost', lost);
+      el.removeEventListener('webglcontextrestored', restored);
+    };
   }, [gl]);
   useFrame(() => {
     if (frames.current < 0) return;
+    if (frames.current === 0) {
+      started.current = performance.now();
+      // compile everything now, including planets the opening shot does not look at yet
+      try {
+        gl.compile(scene, camera);
+      } catch {
+        /* compiled lazily instead */
+      }
+    }
     frames.current++;
-    if (frames.current > 6) {
+    const waited = performance.now() - started.current;
+    if (frames.current > 6 && (texturesPending() === 0 || waited > 6000)) {
       frames.current = -1;
       useStore.setState({ ready: true });
     }
@@ -63,7 +90,8 @@ export function Experience() {
   const tier = useStore((s) => s.tier);
   const paused = useStore((s) => s.paused);
   const degrade = useStore((s) => s.degrade);
-  const settings = tierSettings(tier);
+  const scale = useStore((s) => s.scale);
+  const settings = tierSettings(tier, scale);
 
   return (
     <div className="stage" aria-hidden="true">

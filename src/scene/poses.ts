@@ -30,7 +30,10 @@ const qi = new Quaternion();
 /** Camera angle around a planet, measured from the anti-sun direction. */
 export const STOP_ANGLE = 1.3;
 export const STOP_DISTANCE = 5.6;
-export const STOP_DISTANCE_PORTRAIT = 8.4;
+/** Phones stand further back: the screens are stacked around the planet instead of flanking it. */
+export const STOP_DISTANCE_PORTRAIT = 14;
+/** How far below the planet the portrait camera aims (in planet radii) — lifts the planet above the caption. */
+export const STOP_DROP_PORTRAIT = 1.55;
 
 export function planetFrame(cfg: PlanetConfig) {
   const a = bridge.planetAngle[cfg.id];
@@ -62,7 +65,7 @@ export function planetStopPose(cfg: PlanetConfig, aspect: number, pose: Pose) {
   right.crossVectors(fwd, UP).normalize();
   camUp.crossVectors(right, fwd);
   pose.target.copy(P);
-  if (portrait) pose.target.addScaledVector(camUp, -d * 0.2);
+  if (portrait) pose.target.addScaledVector(camUp, -cfg.radius * STOP_DROP_PORTRAIT);
   else pose.target.addScaledVector(right, -d * 0.2);
   pose.fov = 40;
 }
