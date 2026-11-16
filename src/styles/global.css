@@ -2142,10 +2142,9 @@ html:not([data-route='home']) .hud {
     justify-content: space-between;
     gap: 10px;
   }
+  /* no dot row on phones: it reads as "swipe sideways"; the two arrows stay */
   .rail ol {
-    flex-direction: row;
-    align-items: center;
-    gap: 2px;
+    display: none;
   }
   .rail li button {
     padding: 14px 8px;
