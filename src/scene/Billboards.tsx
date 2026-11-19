@@ -3,7 +3,7 @@ import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import { CanvasTexture, Color, DataTexture, DoubleSide, FrontSide, Group, Mesh, ShaderMaterial, SRGBColorSpace, TextureLoader, Vector3, VideoTexture } from 'three';
 import { planetIndex, type PlanetConfig } from '../config/planets';
 import type { Lang } from '../config/site';
-import { projectSeed, projectsOf, type Project } from '../content/projects';
+import { projectBySlug, projectSeed, projectsOf, type Project } from '../content/projects';
 import { clamp, damp } from '../lib/math';
 import { bridge } from '../state/bridge';
 import { useStore } from '../state/store';
@@ -370,6 +370,18 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
     const g = group.current;
     const m = mesh.current;
     if (!g || !m) return;
+    // With the planets held in one line (Hizala) they sit close together, so only the
+    // screens of the planet you are at stay out; the others fold away as the line forms.
+    let here = -1;
+    if (s.route.kind === 'home') here = s.stop;
+    else if (s.route.kind === 'planet') here = planetIndex(s.route.id) + 1;
+    else if (s.route.kind === 'project') {
+      const pr = projectBySlug(s.route.slug);
+      if (pr) here = planetIndex(pr.planet) + 1;
+    }
+    const show = stopIndex === here ? 1 : 1 - clamp(bridge.align * 1.4);
+    g.scale.setScalar(Math.max(show, 0.0001));
+    g.visible = show > 0.001;
     if (!s.reducedMotion) g.position.y = layout.pos.y + Math.sin(t * 0.35 + seed * 20) * cfg.radius * 0.03;
     // publish the screen rectangle for camera framing + DOM match cuts
     let info = bridge.screens[project.slug];
