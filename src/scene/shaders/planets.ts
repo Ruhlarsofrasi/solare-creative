@@ -121,6 +121,22 @@ vec3 shade(vec3 p, vec3 N, vec3 L, vec3 V){
   return c;
 }`,
 
+  uranus: /* glsl */ `
+vec3 shade(vec3 p, vec3 N, vec3 L, vec3 V){
+  // an almost featureless methane haze: faint bands, a brighter polar cap, soft limb
+  float lat = p.y;
+  float band = 0.025 * sin(lat * 16.0 + 0.8 * snoise(p * 2.6 + vec3(0.0, uTime * 0.01, 0.0)));
+  // deep enough that the tone mapping keeps it cyan rather than washing it to white in full sun
+  vec3 albedo = vec3(0.4, 0.68, 0.74) * (0.97 + band);
+  albedo = mix(albedo, vec3(0.52, 0.76, 0.8), smoothstep(0.55, 0.95, lat) * 0.5);
+  float dif = diffuse(N, L);
+  float ndv = max(dot(N, V), 0.0);
+  vec3 c = albedo * (0.035 + dif * 1.02);
+  c *= mix(0.78, 1.0, pow(ndv, 0.4));
+  c += uAtmo * pow(1.0 - ndv, 2.6) * (0.05 + dif * 0.6);
+  return c;
+}`,
+
   moon: /* glsl */ `
 vec3 shade(vec3 p, vec3 N, vec3 L, vec3 V){
   vec3 albedo = surface(vUv) * 1.3 * uAtmo;
@@ -198,6 +214,7 @@ void main(){
 export const metalFragment = /* glsl */ `
 uniform vec3 uColor;
 uniform float uFlat;
+uniform float uOpacity;
 varying vec3 vObj;
 varying vec3 vNormalW;
 varying vec3 vWorld;
@@ -215,6 +232,6 @@ void main(){
   vec3 c = uColor * (0.1 + dif * 0.8);
   c += vec3(1.0, 0.85, 0.62) * (pow(rl, 60.0) * 3.0 + pow(rl, 6.0) * 0.35);
   c += vec3(0.5, 0.55, 0.6) * fres * 0.22;
-  gl_FragColor = vec4(c, 1.0);
+  gl_FragColor = vec4(c, uOpacity);
   ${tail}
 }`;

@@ -73,6 +73,7 @@ uniform float uFlip;
 uniform float uUseVideo;
 uniform float uPresence;
 uniform float uTexAspect;
+uniform float uOpacity;
 uniform vec3 uA;
 uniform vec3 uB;
 uniform vec3 uC;
@@ -117,7 +118,7 @@ void main(){
   col += vec3(1.0, 0.9, 0.75) * fres * 0.08;
   float edge = smoothstep(0.0, 0.01, uv.x) * smoothstep(1.0, 0.99, uv.x) * smoothstep(0.0, 0.015, uv.y) * smoothstep(1.0, 0.985, uv.y);
   col *= edge * (0.9 + uHover * 0.14) * uPresence * 1.2;
-  gl_FragColor = vec4(col, 1.0);
+  gl_FragColor = vec4(col, uOpacity);
   ${tail}
 }`;
 

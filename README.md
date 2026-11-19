@@ -34,7 +34,7 @@ Upload `dist/` to any static host. The site is a single-page app, so unknown pat
 
 ## URLs
 
-Turkish at the root (`/films`, `/work/amanzoe`), English under `/en`.
+Turkish at the root (`/films`, `/work/golden-hour`), English under `/en`.
 
 ## Secrets
 

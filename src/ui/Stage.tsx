@@ -9,6 +9,7 @@ import { useStore } from '../state/store';
 import { Vector3 } from 'three';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
+import { GalleryPage } from './pages/GalleryPage';
 import { LegalPage, NotFoundPage } from './pages/LegalPage';
 import { ServicePage } from './pages/ServicePage';
 import { ProjectView } from './project/ProjectView';
@@ -77,6 +78,7 @@ function Content({ route }: { route: Route }) {
     case 'planet':
       if (route.id === 'about') return <AboutPage />;
       if (route.id === 'contact') return <ContactPage />;
+      if (route.id === 'gallery') return <GalleryPage />;
       return <ServicePage id={route.id} />;
     case 'project':
       return <ProjectView slug={route.slug} />;

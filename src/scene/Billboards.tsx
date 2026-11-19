@@ -211,6 +211,7 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
   const group = useRef<Group>(null);
   const mesh = useRef<Mesh>(null);
   const hover = useRef(0);
+  const fade = useRef(1);
   const video = useRef<HTMLVideoElement | null>(null);
   const stopIndex = planetIndex(cfg.id) + 1;
 
@@ -232,6 +233,7 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
         uUseVideo: { value: 0 },
         uPresence: { value: 0.4 },
         uTexAspect: { value: 1 },
+        uOpacity: { value: 1 },
         uA: { value: new Color(project.palette[0]) },
         uB: { value: new Color(project.palette[1]) },
         uC: { value: new Color(project.palette[2]) },
@@ -246,7 +248,7 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
     const metal = {
       vertexShader: planetVertex,
       fragmentShader: metalFragment,
-      uniforms: { uColor: { value: frameColor }, uFlat: { value: 0 } },
+      uniforms: { uColor: { value: frameColor }, uFlat: { value: 0 }, uOpacity: { value: 1 } },
       polygonOffset: true,
       polygonOffsetFactor: 2,
       polygonOffsetUnits: 2,
@@ -379,9 +381,23 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
       const pr = projectBySlug(s.route.slug);
       if (pr) here = planetIndex(pr.planet) + 1;
     }
-    const show = stopIndex === here ? 1 : 1 - clamp(bridge.align * 1.4);
-    g.scale.setScalar(Math.max(show, 0.0001));
-    g.visible = show > 0.001;
+    const target = stopIndex === here ? 1 : 1 - clamp(bridge.align * 1.4);
+    // eased, so moving between stops fades screens in and out instead of snapping
+    fade.current = s.reducedMotion ? target : damp(fade.current, target, 3.2, dt);
+    if (Math.abs(fade.current - target) < 0.002) fade.current = target;
+    const f = fade.current;
+    g.visible = f > 0.002;
+    g.scale.setScalar(0.94 + 0.06 * f);
+    // only blend while fading: fully shown screens stay in the opaque pass
+    const blending = f < 0.999;
+    for (const mm of [mat, frameMat, frameOuter]) {
+      mm.uniforms.uOpacity.value = f;
+      if (mm.transparent !== blending) {
+        mm.transparent = blending;
+        mm.depthWrite = !blending;
+        mm.needsUpdate = true;
+      }
+    }
     if (!s.reducedMotion) g.position.y = layout.pos.y + Math.sin(t * 0.35 + seed * 20) * cfg.radius * 0.03;
     // publish the screen rectangle for camera framing + DOM match cuts
     let info = bridge.screens[project.slug];
@@ -415,7 +431,8 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
     if (!interactive() || e.delta > 6) return;
     e.stopPropagation();
     document.body.style.cursor = '';
-    useStore.getState().navigate({ kind: 'project', slug: project.slug });
+    if (isGalleryScreen(project.slug)) useStore.getState().navigate({ kind: 'planet', id: 'gallery' });
+    else useStore.getState().navigate({ kind: 'project', slug: project.slug });
   };
 
   const d = cfg.radius * 0.045;
@@ -453,9 +470,28 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
   );
 }
 
+/** The Gallery planet shows two of its frames; clicking either opens the Gallery page. */
+const galleryScreen = (slug: string, file: string, palette: [string, string, string]): Project =>
+  ({
+    slug,
+    planet: 'gallery' as Project['planet'],
+    format: 'vertical',
+    title: '',
+    demo: false,
+    category: { tr: 'Galeri', en: 'Gallery' },
+    summary: { tr: '', en: '' },
+    description: { tr: '', en: '' },
+    scope: { tr: [], en: [] },
+    kind: 'still',
+    palette,
+    poster: `${import.meta.env.BASE_URL}gallery/${file}.webp`,
+  }) as Project;
+const GALLERY_SCREENS = [galleryScreen('gallery-a', 'g05', ['#f2c27a', '#5f8a7c', '#101412']), galleryScreen('gallery-b', 'g04', ['#f4efe6', '#8aa3b4', '#111315'])];
+const isGalleryScreen = (slug: string) => slug.startsWith('gallery-');
+
 /** Monumental screens orbiting a planet — one per project of that destination. */
 export function Billboards({ cfg }: { cfg: PlanetConfig }) {
-  const list = useMemo(() => projectsOf(cfg.id), [cfg.id]);
+  const list = useMemo(() => (cfg.id === 'gallery' ? GALLERY_SCREENS : projectsOf(cfg.id)), [cfg.id]);
   let flat = 0;
   return (
     <>

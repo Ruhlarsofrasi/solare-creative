@@ -7,10 +7,10 @@ import type { PlanetId } from '../config/planets';
  * ─────────────────────────────────────────────────────────────────────────
  *
  *  To publish a real film:
- *   1. Put the files in  /public/media/   (e.g. amanzoe.mp4, amanzoe.jpg)
+ *   1. Put the files in  /public/media/   (e.g. golden-hour.mp4, golden-hour.jpg)
  *   2. Fill in `video` and `poster` below, e.g.
- *        video:  '/media/amanzoe.mp4',
- *        poster: '/media/amanzoe.jpg',
+ *        video:  '/media/golden-hour.mp4',
+ *        poster: '/media/golden-hour.jpg',
  *      (an external URL such as a CDN / Mux / Cloudflare Stream MP4 also works)
  *   3. Set `demo: false` once the project is a real, approved credit.
  *
@@ -43,7 +43,7 @@ export interface Project {
   description: L;
   scope: L<string[]>;
   /**
-   * What the piece is: a 'film' (plays in the player; shows poster until ideo is set)
+   * What the piece is: a 'film' (plays in the player; shows poster until video is set)
    * or a 'still' (photography — shown as an image on the billboard, card and project page).
    */
   kind: 'film' | 'still';
@@ -56,26 +56,26 @@ export interface Project {
 }
 
 export const projects: Project[] = [
-  // ── 01 CINEMATIC FILMS ────────────────────────────────────────────────
+  // ── CINEMATIC FILMS ───────────────────────────────────────────────────
   {
-    slug: 'amanzoe',
+    slug: 'golden-hour',
     planet: 'films',
     format: 'wide',
-    title: 'Amanzoe',
+    title: 'Golden Hour',
     demo: true,
     category: { tr: 'Marka Filmi', en: 'Brand Film' },
-    location: { tr: 'Demo konsept', en: 'Demo concept' },
+    location: { tr: 'Örnek konsept', en: 'Sample concept' },
     summary: {
-      tr: 'Gün doğumundan alacakaranlığa, tek bir günün ışığıyla anlatılan otel filmi konsepti.',
-      en: 'A hotel film concept told through the light of a single day, from sunrise to dusk.',
+      tr: 'Sabahtan akşama, bir günün ışığıyla anlatılan otel filmi.',
+      en: 'A hotel film told through the light of one day, morning to evening.',
     },
     description: {
-      tr: 'Bu bir demo projedir. Yapının sütunları arasından süzülen ilk ışıkla açılan, misafirin gün içindeki ritmini takip eden ve mavi saatte kapanan bir ana marka filmi yaklaşımını gösterir. Gerçek film yayına alındığında bu alan otelin hikâyesi, ekip ve teslim edilen formatlarla güncellenecektir.',
-      en: 'This is a demo project. It illustrates our approach to a flagship brand film: opening on first light between the colonnades, following the rhythm of a guest\'s day and closing in blue hour. When the real film is released, this space will be updated with the story, crew and delivered formats.',
+      tr: 'Örnek bir konsept. Film ilk ışıkla açılıyor, misafirin gününü takip ediyor ve akşam mavisinde kapanıyor. Gerçek film yayınlandığında bu sayfa güncellenecek.',
+      en: 'A sample concept. The film opens on first light, follows a guest’s day and closes at dusk. This page will be updated when the real film is released.',
     },
     scope: {
-      tr: ['Konsept & senaryo', 'Sinematik çekim', 'FPV & drone', 'Renk & ses tasarımı'],
-      en: ['Concept & script', 'Cinematic photography', 'FPV & drone', 'Colour & sound design'],
+      tr: ['Konsept & senaryo', 'Sinematik çekim', 'Drone', 'Renk & ses'],
+      en: ['Concept & script', 'Cinematography', 'Drone', 'Colour & sound'],
     },
     palette: ['#f2c27a', '#b4552a', '#1b1410'],
     kind: 'film',
@@ -83,24 +83,24 @@ export const projects: Project[] = [
     poster: '/media/hero-pool.webp',
   },
   {
-    slug: 'four-seasons-maldives',
+    slug: 'horizon',
     planet: 'films',
     format: 'wide',
-    title: 'Four Seasons Maldives',
+    title: 'Horizon',
     demo: true,
     category: { tr: 'Kampanya Filmi', en: 'Campaign Film' },
-    location: { tr: 'Demo konsept', en: 'Demo concept' },
+    location: { tr: 'Örnek konsept', en: 'Sample concept' },
     summary: {
-      tr: 'Su, ufuk ve sessizlik üzerine kurulu bir resort kampanyası konsepti.',
-      en: 'A resort campaign concept built on water, horizon and stillness.',
+      tr: 'Deniz, ufuk ve sessizlik üzerine bir sezon kampanyası.',
+      en: 'A seasonal campaign about the sea, the horizon and quiet.',
     },
     description: {
-      tr: 'Bu bir demo projedir. Tek bir ufuk çizgisi etrafında kurgulanan; su üstü villalar, sualtı sekansları ve hava çekimlerini aynı görsel dilde birleştiren sezonluk kampanya filmi yaklaşımını temsil eder.',
-      en: 'This is a demo project. It represents a seasonal campaign film composed around a single horizon line — uniting overwater villas, underwater sequences and aerials in one visual language.',
+      tr: 'Örnek bir konsept. Sahil, havuz ve hava çekimlerini tek bir ufuk çizgisi etrafında toplayan sezon kampanyası.',
+      en: 'A sample concept. A seasonal campaign that brings the shore, the pool and aerial shots together around one horizon line.',
     },
     scope: {
-      tr: ['Kampanya konsepti', 'Hava & sualtı çekimi', 'Kurgu', '30" / 15" uyarlamalar'],
-      en: ['Campaign concept', 'Aerial & underwater', 'Edit', '30" / 15" cut-downs'],
+      tr: ['Kampanya fikri', 'Hava çekimi', 'Kurgu', '30 / 15 sn versiyonlar'],
+      en: ['Campaign idea', 'Aerials', 'Edit', '30 / 15 sec versions'],
     },
     palette: ['#9fd8d2', '#e9c58d', '#0e1a1c'],
     kind: 'film',
@@ -108,26 +108,26 @@ export const projects: Project[] = [
     poster: '',
   },
 
-  // ── 02 ARCHITECTURE ───────────────────────────────────────────────────
+  // ── ARCHITECTURE ──────────────────────────────────────────────────────
   {
-    slug: 'rosewood-london',
+    slug: 'quiet-room',
     planet: 'architecture',
     format: 'wide',
-    title: 'Rosewood London',
+    title: 'Quiet Room',
     demo: true,
-    category: { tr: 'Mimari Film', en: 'Architectural Film' },
-    location: { tr: 'Demo konsept', en: 'Demo concept' },
+    category: { tr: 'Mimari Fotoğraf', en: 'Architectural Photography' },
+    location: { tr: 'Örnek konsept', en: 'Sample concept' },
     summary: {
-      tr: 'Avludan süite, mekânın oranlarını ve dokusunu izleyen mimari film konsepti.',
-      en: 'An architectural film concept tracing proportion and texture from courtyard to suite.',
+      tr: 'Bir odanın oranlarını ve dokusunu izleyen sakin bir seri.',
+      en: 'A calm series following the proportions and textures of a room.',
     },
     description: {
-      tr: 'Bu bir demo projedir. Yavaş, kontrollü kamera hareketleriyle cephe, avlu ve iç mekân arasındaki geçişleri anlatan; malzemeyi ve ışığı başrole koyan mimari film yaklaşımını gösterir.',
-      en: 'This is a demo project. It shows an architectural film approach where slow, controlled camera movement connects façade, courtyard and interior — with material and light in the leading role.',
+      tr: 'Örnek bir konsept. Malzemeyi ve ışığı öne alan, yavaş ve kontrollü kadrajlardan oluşan bir mimari seri.',
+      en: 'A sample concept. An architectural series of slow, controlled frames that put material and light first.',
     },
     scope: {
-      tr: ['Mekân keşfi', 'Gimbal & slider çekimi', 'Cephe drone çekimi', 'Renk düzenleme'],
-      en: ['Location scouting', 'Gimbal & slider work', 'Façade aerials', 'Colour grading'],
+      tr: ['Mekân keşfi', 'Gimbal çekimi', 'Mimari fotoğraf', 'Renk'],
+      en: ['Location scouting', 'Gimbal work', 'Architectural photography', 'Colour'],
     },
     palette: ['#d8d2c4', '#7c8a8e', '#141618'],
     kind: 'still',
@@ -136,24 +136,24 @@ export const projects: Project[] = [
     gallery: ['/media/about-lounge.webp'],
   },
   {
-    slug: 'the-peninsula-tokyo',
+    slug: 'night-reveal',
     planet: 'architecture',
     format: 'vertical',
-    title: 'The Peninsula Tokyo',
+    title: 'Night Reveal',
     demo: true,
-    category: { tr: 'Drone Sinematografi', en: 'Drone Cinematography' },
-    location: { tr: 'Demo konsept', en: 'Demo concept' },
+    category: { tr: 'Drone & Gece Çekimi', en: 'Drone & Night Shoot' },
+    location: { tr: 'Örnek konsept', en: 'Sample concept' },
     summary: {
-      tr: 'Şehir ışıklarının içinden yükselen tek planlık FPV açılış konsepti.',
-      en: 'A one-take FPV reveal concept rising through the city lights.',
+      tr: 'Dışarıdan içeriye uzanan bir gece açılışı.',
+      en: 'A night opening that moves from outside to inside.',
     },
     description: {
-      tr: 'Bu bir demo projedir. Sokak seviyesinden lobiye, lobiden çatı katına tek bir kesintisiz FPV hareketiyle ilerleyen açılış sekansı fikrini temsil eder.',
-      en: 'This is a demo project. It represents a reveal sequence travelling from street level through the lobby to the rooftop in one uninterrupted FPV move.',
+      tr: 'Örnek bir konsept. Havadan başlayıp cepheye, oradan aydınlatılmış restorana inen bir gece açılışı.',
+      en: 'A sample concept. A night opening that starts in the air, comes down to the façade and ends inside the lit restaurant.',
     },
     scope: {
-      tr: ['FPV koreografisi', 'İç mekân uçuşu', 'Gece çekimi', 'Ses tasarımı'],
-      en: ['FPV choreography', 'Indoor flight', 'Night photography', 'Sound design'],
+      tr: ['Drone çekimi', 'Gimbal çekimi', 'Gece çekimi', 'Ses tasarımı'],
+      en: ['Drone', 'Gimbal work', 'Night shoot', 'Sound design'],
     },
     palette: ['#c9b8ff', '#e3a45e', '#0c0d16'],
     kind: 'film',
@@ -161,26 +161,26 @@ export const projects: Project[] = [
     poster: '/media/process-restaurant.webp',
   },
 
-  // ── 03 SOCIAL CONTENT ─────────────────────────────────────────────────
+  // ── SOCIAL CONTENT ────────────────────────────────────────────────────
   {
-    slug: 'one-and-only-reethi-rah',
+    slug: 'shoreline',
     planet: 'social',
     format: 'vertical',
-    title: 'One&Only Reethi Rah',
+    title: 'Shoreline',
     demo: true,
     category: { tr: 'Sosyal İçerik Serisi', en: 'Social Series' },
-    location: { tr: 'Demo konsept', en: 'Demo concept' },
+    location: { tr: 'Örnek konsept', en: 'Sample concept' },
     summary: {
-      tr: 'Dikey formatta, bir sezon boyunca yayınlanacak kısa film serisi konsepti.',
-      en: 'A season-long series of vertical short films, concept only.',
+      tr: 'Bir sezon boyunca yayınlanacak dikey kısa video serisi.',
+      en: 'A series of vertical short videos for one season.',
     },
     description: {
-      tr: 'Bu bir demo projedir. Tek çekim döneminden çıkan; oda, gastronomi ve deneyim başlıklarına ayrılmış, yayın takvimine göre planlanmış dikey içerik serisini örnekler.',
-      en: 'This is a demo project. It illustrates a vertical content series produced in one shoot window — organised by rooms, gastronomy and experiences, and planned against a publishing calendar.',
+      tr: 'Örnek bir konsept. Tek bir çekim döneminde üretilen; oda, mutfak ve deneyim başlıklarına ayrılmış, takvime göre planlanmış dikey içerikler.',
+      en: 'A sample concept. Vertical content shot in one window, split into rooms, kitchen and experiences, and planned against a calendar.',
     },
     scope: {
-      tr: ['İçerik stratejisi', 'Dikey çekim', 'Reels / TikTok kurgusu', 'Yayın takvimi'],
-      en: ['Content strategy', 'Vertical photography', 'Reels / TikTok edits', 'Publishing calendar'],
+      tr: ['İçerik planı', 'Dikey çekim', 'Reels / TikTok kurgusu', 'Yayın takvimi'],
+      en: ['Content plan', 'Vertical shoot', 'Reels / TikTok edits', 'Publishing calendar'],
     },
     palette: ['#f4d9c2', '#a6b18a', '#161713'],
     kind: 'still',
@@ -188,24 +188,24 @@ export const projects: Project[] = [
     poster: '/media/work-beach.webp',
   },
   {
-    slug: 'mandarin-oriental-bangkok',
+    slug: 'kitchen-rhythm',
     planet: 'social',
     format: 'vertical',
-    title: 'Mandarin Oriental Bangkok',
+    title: 'Kitchen Rhythm',
     demo: true,
     category: { tr: 'Dijital Kampanya', en: 'Digital Campaign' },
-    location: { tr: 'Demo konsept', en: 'Demo concept' },
+    location: { tr: 'Örnek konsept', en: 'Sample concept' },
     summary: {
-      tr: 'Gastronomi odaklı, kısa format bir dijital kampanya konsepti.',
-      en: 'A gastronomy-led short-form digital campaign concept.',
+      tr: 'Mutfağa odaklanan kısa bir dijital kampanya.',
+      en: 'A short digital campaign about the kitchen.',
     },
     description: {
-      tr: 'Bu bir demo projedir. Mutfağın ritmini, servisin detaylarını ve nehir kıyısındaki akşamı 15 saniyelik karelere bölen kampanya kurgusunu örnekler.',
-      en: 'This is a demo project. It illustrates a campaign structure that distils the rhythm of the kitchen, the detail of service and a riverside evening into fifteen-second frames.',
+      tr: 'Örnek bir konsept. Mutfağın temposunu, servisin detaylarını ve akşam masasını 15 saniyelik parçalara bölen bir kampanya.',
+      en: 'A sample concept. A campaign that cuts the pace of the kitchen, the details of service and the evening table into 15-second pieces.',
     },
     scope: {
-      tr: ['Kampanya fikri', 'Gastronomi çekimi', '9:16 / 4:5 teslimler', 'Reklam uyarlamaları'],
-      en: ['Campaign idea', 'Gastronomy photography', '9:16 / 4:5 deliverables', 'Paid-media variants'],
+      tr: ['Kampanya fikri', 'Yemek çekimi', '9:16 / 4:5 teslim', 'Reklam versiyonları'],
+      en: ['Campaign idea', 'Food shoot', '9:16 / 4:5 delivery', 'Ad versions'],
     },
     palette: ['#e8b37a', '#8c3f2b', '#150f0c'],
     kind: 'still',
@@ -214,7 +214,7 @@ export const projects: Project[] = [
     gallery: ['/media/process-restaurant.webp'],
   },
 
-  // ── 04 AI & MOTION ────────────────────────────────────────────────────
+  // ── AI & MOTION ───────────────────────────────────────────────────────
   {
     slug: 'solar-study',
     planet: 'ai-motion',
@@ -222,17 +222,17 @@ export const projects: Project[] = [
     title: 'Solar Study',
     demo: true,
     category: { tr: 'AI Konsept Filmi', en: 'AI Concept Film' },
-    location: { tr: 'Stüdyo deneyi', en: 'Studio experiment' },
+    location: { tr: 'Stüdyo çalışması', en: 'Studio work' },
     summary: {
-      tr: 'Işığın bir mekânı nasıl dönüştürdüğünü araştıran stüdyo içi deneysel çalışma.',
-      en: 'An in-house experiment exploring how light transforms a space.',
+      tr: 'Işığın bir mekânı nasıl değiştirdiğine dair stüdyo denemesi.',
+      en: 'A studio experiment on how light changes a space.',
     },
     description: {
-      tr: 'Bu bir demo projedir. Gerçek çekimi tamamlayan yapay zekâ destekli varyasyonların, konsept görsellerin ve kampanya uyarlamalarının nasıl üretilebileceğini gösteren stüdyo içi bir araştırmadır. Araç değil, fikir önde.',
-      en: 'This is a demo project — an in-house study showing how AI-assisted variations, concept visuals and campaign adaptations can extend a real shoot. The idea leads, not the tool.',
+      tr: 'Stüdyo içi bir deneme. Gerçek çekime eklenebilecek yapay zekâ destekli varyasyonları ve konsept görselleri araştırıyor.',
+      en: 'An in-house experiment exploring AI-assisted variations and concept visuals that can be added to a real shoot.',
     },
     scope: {
-      tr: ['Konsept görseller', 'AI destekli varyasyon', 'Compositing', 'Görsel geliştirme'],
+      tr: ['Konsept görseller', 'AI destekli varyasyon', 'Compositing', 'Görünüm geliştirme'],
       en: ['Concept visuals', 'AI-assisted variations', 'Compositing', 'Look development'],
     },
     palette: ['#ffb057', '#ff5a1f', '#120a06'],
@@ -241,20 +241,20 @@ export const projects: Project[] = [
     poster: '',
   },
   {
-    slug: 'mirage',
+    slug: 'afterglow',
     planet: 'ai-motion',
     format: 'wide',
-    title: 'Mirage',
+    title: 'Afterglow',
     demo: true,
     category: { tr: 'Motion & CGI', en: 'Motion & CGI' },
-    location: { tr: 'Stüdyo deneyi', en: 'Studio experiment' },
+    location: { tr: 'Stüdyo çalışması', en: 'Studio work' },
     summary: {
-      tr: 'Bir otel kimliği için hareketli tipografi ve CGI geçişleri üzerine çalışma.',
-      en: 'A study in kinetic typography and CGI transitions for a hotel identity.',
+      tr: 'Bir otel kimliği için hareketli tipografi ve CGI geçişleri.',
+      en: 'Kinetic typography and CGI transitions for a hotel identity.',
     },
     description: {
-      tr: 'Bu bir demo projedir. Logo animasyonu, başlık tasarımı ve film içi CGI geçişlerinin tek bir hareket dili içinde nasıl birleşebileceğini araştırır.',
-      en: 'This is a demo project exploring how logo animation, title design and in-film CGI transitions can share a single language of motion.',
+      tr: 'Stüdyo içi bir deneme. Logo animasyonu, başlıklar ve film içi CGI geçişlerinin aynı hareket diliyle nasıl birleşeceğine bakıyor.',
+      en: 'An in-house experiment looking at how logo animation, titles and in-film CGI transitions can move the same way.',
     },
     scope: {
       tr: ['Motion tasarım', 'Başlık & tipografi', 'CGI geçişler', 'VFX'],
@@ -266,7 +266,6 @@ export const projects: Project[] = [
     poster: '',
   },
 ];
-
 export const projectBySlug = (slug: string) => projects.find((p) => p.slug === slug);
 export const projectsOf = (planet: string) => projects.filter((p) => p.planet === planet);
 

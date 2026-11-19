@@ -1,8 +1,8 @@
 import type { L } from './site';
 
-export type PlanetId = 'films' | 'architecture' | 'social' | 'ai-motion' | 'about' | 'contact';
+export type PlanetId = 'films' | 'architecture' | 'social' | 'ai-motion' | 'about' | 'contact' | 'gallery';
 /** The destinations are the real planets, in order from the sun. */
-export type PlanetKind = 'mercury' | 'venus' | 'earth' | 'mars' | 'jupiter' | 'saturn';
+export type PlanetKind = 'mercury' | 'venus' | 'earth' | 'mars' | 'jupiter' | 'saturn' | 'uranus';
 
 export interface MoonConfig {
   radius: number;
@@ -40,7 +40,7 @@ export interface PlanetConfig {
 }
 
 /**
- * The six orbital destinations. Order = journey order = order from the sun.
+ * The seven orbital destinations. Order = journey order = order from the sun.
  * Sizes and distances are art-directed, not to scale.
  */
 export const planets: PlanetConfig[] = [
@@ -51,7 +51,7 @@ export const planets: PlanetConfig[] = [
     kind: 'mercury',
     body: { tr: 'Merkür', en: 'Mercury' },
     name: { tr: 'Sinematik Filmler', en: 'Cinematic Films' },
-    tagline: { tr: 'Otel filmleri, reklam ve sinematik anlatı', en: 'Hotel films, commercials and cinematic storytelling' },
+    tagline: { tr: 'Tanıtım, marka ve kampanya filmleri', en: 'Promotional, brand and campaign films' },
     orbit: { radius: 26, angle: 0.55, speed: 0.012, y: 0.6 },
     radius: 1.8,
     spin: 0.02,
@@ -69,7 +69,7 @@ export const planets: PlanetConfig[] = [
     kind: 'venus',
     body: { tr: 'Venüs', en: 'Venus' },
     name: { tr: 'Mimari', en: 'Architecture' },
-    tagline: { tr: 'Mimari film, drone ve mekânsal anlatı', en: 'Architectural film, drone and spatial storytelling' },
+    tagline: { tr: 'Mimari film, iç mekân ve drone', en: 'Architectural film, interiors and drone' },
     orbit: { radius: 35, angle: 2.05, speed: 0.0095, y: -0.8 },
     radius: 2.3,
     spin: -0.012,
@@ -87,7 +87,7 @@ export const planets: PlanetConfig[] = [
     kind: 'earth',
     body: { tr: 'Dünya', en: 'Earth' },
     name: { tr: 'Sosyal İçerik', en: 'Social Content' },
-    tagline: { tr: 'Kısa format filmler ve dijital kampanyalar', en: 'Short-form films and digital campaigns' },
+    tagline: { tr: 'Kısa video, içerik serileri ve fotoğraf', en: 'Short video, content series and photography' },
     orbit: { radius: 44, angle: 3.7, speed: 0.008, y: 1.2 },
     radius: 2.4,
     spin: 0.06,
@@ -105,7 +105,7 @@ export const planets: PlanetConfig[] = [
     kind: 'mars',
     body: { tr: 'Mars', en: 'Mars' },
     name: { tr: 'AI & Motion', en: 'AI & Motion' },
-    tagline: { tr: 'Yapay zekâ prodüksiyonu, motion, VFX ve CGI', en: 'AI production, motion graphics, VFX and CGI' },
+    tagline: { tr: 'Yapay zekâ destekli üretim, motion ve CGI', en: 'AI-assisted production, motion and CGI' },
     orbit: { radius: 53, angle: 5.1, speed: 0.0068, y: -1.0 },
     radius: 2.0,
     spin: 0.055,
@@ -126,7 +126,7 @@ export const planets: PlanetConfig[] = [
     kind: 'jupiter',
     body: { tr: 'Jüpiter', en: 'Jupiter' },
     name: { tr: 'Solare Hakkında', en: 'About Solare' },
-    tagline: { tr: 'Stüdyo, felsefe, süreç ve hizmetler', en: 'Studio, philosophy, process and services' },
+    tagline: { tr: 'Stüdyo, süreç ve hizmetler', en: 'Studio, process and services' },
     orbit: { radius: 63, angle: 0.95, speed: 0.0056, y: 0.9 },
     radius: 3.7,
     spin: 0.09,
@@ -149,7 +149,7 @@ export const planets: PlanetConfig[] = [
     kind: 'saturn',
     body: { tr: 'Satürn', en: 'Saturn' },
     name: { tr: 'İletişim', en: 'Contact' },
-    tagline: { tr: 'Otelinizin hikâyesini konuşalım', en: "Let's talk about your hotel's story" },
+    tagline: { tr: 'Otelinizi konuşalım', en: 'Let’s talk about your hotel' },
     orbit: { radius: 75, angle: 2.75, speed: 0.0047, y: -0.5 },
     radius: 3.0,
     spin: 0.08,
@@ -159,6 +159,28 @@ export const planets: PlanetConfig[] = [
     air: { scale: 1.08, strength: 0.45 },
     tone: 196,
     moons: [{ radius: 0.3, distance: 10.5, speed: 0.12, phase: 2.2, incline: 0.45, tint: '#e0b070' }],
+  },
+  {
+    id: 'gallery',
+    slug: 'gallery',
+    index: '07',
+    kind: 'uranus',
+    body: { tr: 'Uranüs', en: 'Uranus' },
+    name: { tr: 'Galeri', en: 'Gallery' },
+    tagline: { tr: 'Seçilmiş kareler', en: 'Selected frames' },
+    orbit: { radius: 85, angle: 4.35, speed: 0.0041, y: 0.7 },
+    radius: 2.7,
+    spin: 0.07,
+    // Uranus rolls on its side
+    tilt: 1.71,
+    color: '#a6dde0',
+    atmosphere: '#9fe3ee',
+    air: { scale: 1.07, strength: 0.55 },
+    tone: 174.61,
+    moons: [
+      { radius: 0.22, distance: 6.0, speed: 0.3, phase: 0.6, incline: 1.5, tint: '#d8d4cc' },
+      { radius: 0.2, distance: 7.6, speed: 0.2, phase: 3.4, incline: 1.5, tint: '#c9c2b8' },
+    ],
   },
 ];
 

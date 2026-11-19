@@ -194,7 +194,8 @@ function Planet({ cfg }: { cfg: PlanetConfig }) {
     return { surface, air };
   }, [cfg]);
 
-  const map = useMap(`${cfg.kind}.jpg`, () => (mats.surface.uniforms.uReady.value = 1));
+  // Uranus is shaded procedurally (a near-featureless haze), every other planet from its map
+  const map = useMap(cfg.kind === 'uranus' ? null : `${cfg.kind}.jpg`, () => (mats.surface.uniforms.uReady.value = 1));
   const night = useMap(cfg.kind === 'earth' ? 'earth-night.jpg' : null);
   const clouds = useMap(cfg.kind === 'earth' ? 'earth-clouds.jpg' : null);
   mats.surface.uniforms.uMap.value = map;

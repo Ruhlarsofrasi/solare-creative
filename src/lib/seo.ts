@@ -19,7 +19,13 @@ export function applySeo(route: Route, lang: Lang) {
     const p = planetById(route.id)!;
     title = `${p.name[lang]} — ${site.name}`;
     description =
-      route.id === 'about' ? c.about.body[0] : route.id === 'contact' ? c.contact.lede : c.services[route.id].lede;
+      route.id === 'about'
+        ? c.about.body[0]
+        : route.id === 'contact'
+          ? c.contact.lede
+          : route.id === 'gallery'
+            ? `${c.gallery.lede} ${c.meta.description}`
+            : c.services[route.id].lede;
   } else if (route.kind === 'project') {
     const p = projectBySlug(route.slug)!;
     title = `${p.title} · ${p.category[lang]} — ${site.name}`;
