@@ -20,12 +20,12 @@ let eclipseTl: gsap.core.Timeline | null = null;
  */
 export function triggerEclipse() {
   if (eclipseTl?.isActive()) return false;
-  bridge.eclipseX = 3;
+  bridge.eclipseX = 1;
   bridge.eclipseOn = 1;
   eclipseTl = gsap
     .timeline({ onComplete: () => (bridge.eclipseOn = 0) })
-    .to(bridge, { eclipseX: 0, duration: 6, ease: 'power2.out' })
-    .to(bridge, { eclipseX: -3, duration: 6, ease: 'power2.in', delay: 4 });
+    .to(bridge, { eclipseX: 0, duration: 7, ease: 'power2.out' })
+    .to(bridge, { eclipseX: -1, duration: 7, ease: 'power2.in', delay: 4 });
   useStore.getState().discover('eclipse');
   return true;
 }
@@ -44,6 +44,7 @@ const toSun = new Vector3();
 const side = new Vector3();
 const lift = new Vector3();
 const UP = new Vector3(0, 1, 0);
+const look = new Vector3();
 
 /** The eclipsing Moon: lit only from behind by the sun, so it reads as a black disc with the faintest earthshine. */
 function EclipseMoon() {
@@ -73,22 +74,36 @@ function EclipseMoon() {
     const m = ref.current;
     if (!m) return;
     m.visible = bridge.eclipseOn > 0;
-    if (!m.visible) return;
+    if (!m.visible) {
+      bridge.eclipseCover = 0;
+      return;
+    }
     const cam = state.camera;
     toSun.copy(cam.position).negate();
     const dist = toSun.length();
     toSun.normalize();
     // well in front of the sun, and a touch larger than it on screen so totality is complete
     const D = dist * 0.42;
-    const r = D * Math.tan(Math.asin(Math.min(SUN_RADIUS / dist, 0.99)) * 1.035);
+    const sunAng = Math.asin(Math.min(SUN_RADIUS / dist, 0.99)) * 1.035;
+    const r = D * Math.tan(sunAng);
     side.crossVectors(toSun, UP).normalize();
     lift.crossVectors(side, toSun).normalize();
+    // The path starts and ends just outside the frame, so the Moon never pops in or out:
+    // how far the sun sits from the centre of view, plus the half-diagonal of the lens, plus the Moon itself.
+    const pc = cam as typeof cam & { fov?: number; aspect?: number };
+    const halfV = ((pc.fov ?? 40) * Math.PI) / 360;
+    const halfDiag = Math.atan(Math.tan(halfV) * Math.hypot(1, pc.aspect ?? 1.6));
+    cam.getWorldDirection(look);
+    const offAxis = Math.acos(Math.min(1, Math.max(-1, look.dot(toSun))));
+    const span = Math.min(40, (offAxis + halfDiag) / sunAng + 1.3);
+    const x = bridge.eclipseX * span;
+    bridge.eclipseCover = Math.max(0, Math.min(1, 1 - Math.abs(x) / 2.1));
     m.scale.setScalar(r);
     m.position
       .copy(cam.position)
       .addScaledVector(toSun, D)
-      .addScaledVector(side, bridge.eclipseX * r)
-      .addScaledVector(lift, bridge.eclipseX * r * 0.22);
+      .addScaledVector(side, x * r)
+      .addScaledVector(lift, x * r * 0.22);
   });
   return (
     <mesh ref={ref} material={mat} visible={false} renderOrder={1}>

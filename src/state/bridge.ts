@@ -43,9 +43,11 @@ export const bridge = {
   focus: { x: 0, dist: 100 },
   /** True while the visitor is dragging a planet to turn it. */
   dragging: false,
-  /** Eclipse secret: 1 while the Moon is crossing, and its offset in Moon radii (0 = totality). */
+  /** Eclipse secret: 1 while the Moon is crossing; its path runs 1 (off-screen) → 0 (totality) → -1 (off-screen). */
   eclipseOn: 0,
-  eclipseX: 3,
+  eclipseX: 1,
+  /** How much of the sun the Moon hides right now, 0..1 (labels stop darkening when it is covered). */
+  eclipseCover: 0,
   /** Opening shot: playback speed (0 = not running) and linear time 0..1. */
   introSpeed: 0,
   introT: 0,

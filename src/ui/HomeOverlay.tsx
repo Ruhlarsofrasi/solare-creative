@@ -15,6 +15,8 @@ const pt = { x: 0, y: 0 };
 const sunP = new Vector3();
 const sunE = new Vector3();
 const plE = new Vector3();
+/** How far the sun's bright glow reaches, in sun radii (matches the CSS fade below). */
+const GLOW = 2.1;
 
 /** Labels that track planets / hovered screens in screen space. */
 function Labels() {
@@ -60,7 +62,8 @@ function Labels() {
         const y0 = pt.y - b.h / 2;
         const nx = Math.max(x0, Math.min(sx, x0 + b.w));
         const ny = Math.max(y0, Math.min(sy, y0 + b.h));
-        const over = sr > 0 && Math.hypot(sx - nx, sy - ny) < sr;
+        // the bright glow reaches well past the disc; names inside it need dark ink too
+        const over = sr > 0 && bridge.eclipseCover < 0.6 && Math.hypot(sx - nx, sy - ny) < sr * GLOW;
         t.classList.toggle('is-eclipsed', over);
         if (over && cam) {
           t.style.setProperty('--cx', `${(sx - x0).toFixed(1)}px`);

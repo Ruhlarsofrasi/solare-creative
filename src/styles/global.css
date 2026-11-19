@@ -936,7 +936,7 @@ html:not([data-route='home']) .hud {
   color: transparent;
   background-image:
     radial-gradient(circle at var(--px) var(--py), var(--ivory) var(--pr), transparent calc(var(--pr) + 0.5px)),
-    radial-gradient(circle at var(--cx) var(--cy), #140d06 var(--sr), var(--ivory) calc(var(--sr) + 0.5px));
+    radial-gradient(circle at var(--cx) var(--cy), #140d06 calc(var(--sr) * 1.35), var(--ivory) calc(var(--sr) * 2.1));
   -webkit-background-clip: text;
   background-clip: text;
 }

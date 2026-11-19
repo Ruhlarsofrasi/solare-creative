@@ -70,7 +70,11 @@ class AudioEngine {
         this.synth.gain.setTargetAtTime(0, t, 0.8);
         this.musicGain.gain.setTargetAtTime(clamp(site.audio.volume), t, 0.8);
       });
-      el.addEventListener('error', () => (this.music = null)); // no file → synthesised ambience stays
+      el.addEventListener('error', () => {
+        // no file → synthesised ambience stays. The name must match site.audio.music exactly.
+        console.warn(`[audio] ${site.audio.music} not found — playing the built-in ambience instead`);
+        this.music = null;
+      });
       el.src = site.audio.music;
       try {
         ctx.createMediaElementSource(el).connect(this.musicGain);
