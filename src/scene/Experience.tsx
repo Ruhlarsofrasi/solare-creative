@@ -1,6 +1,5 @@
 import { Component, Suspense, useEffect, useRef, type ReactNode } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { PerformanceMonitor } from '@react-three/drei';
 import { Bloom, EffectComposer, ToneMapping, Vignette } from '@react-three/postprocessing';
 import { ToneMappingMode } from 'postprocessing';
 import { ACESFilmicToneMapping, HalfFloatType } from 'three';
@@ -89,9 +88,8 @@ function Effects() {
 export function Experience() {
   const tier = useStore((s) => s.tier);
   const paused = useStore((s) => s.paused);
-  const degrade = useStore((s) => s.degrade);
-  const scale = useStore((s) => s.scale);
-  const settings = tierSettings(tier, scale);
+  // Quality is fixed for the whole visit: nothing here lowers resolution or detail when frames drop.
+  const settings = tierSettings(tier);
 
   return (
     <div className="stage" aria-hidden="true">
@@ -115,7 +113,6 @@ export function Experience() {
             <Planets />
             <Secrets />
             <Effects />
-            <PerformanceMonitor onDecline={degrade} flipflops={2} onFallback={degrade} />
             <Ready />
           </Suspense>
         </Canvas>

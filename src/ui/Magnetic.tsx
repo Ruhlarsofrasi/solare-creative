@@ -22,6 +22,9 @@ interface Body {
   vr: number;
 }
 
+/** Magnetic letters are switched off for now. Set to true to bring the effect back. */
+const MAGNETIC_ENABLED = false;
+
 const pointer = { x: -9999, y: -9999, active: false };
 if (typeof window !== 'undefined') {
   window.addEventListener(
@@ -48,7 +51,7 @@ export function Magnetic({ text, as: Tag = 'span', className, strength = 1, id, 
 
   useEffect(() => {
     const el = root.current;
-    if (!el || reduced || window.matchMedia('(pointer: coarse)').matches) return;
+    if (!MAGNETIC_ENABLED || !el || reduced || window.matchMedia('(pointer: coarse)').matches) return;
     const spans = Array.from(el.querySelectorAll<HTMLElement>('[data-m]'));
     const bodies: Body[] = spans.map(() => ({ x: 0, y: 0, r: 0, vx: 0, vy: 0, vr: 0 }));
     let raf = 0;

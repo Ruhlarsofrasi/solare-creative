@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
-    "og": "node scripts/make-og.mjs"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fontsource/cormorant-garamond": "^5.1.0",

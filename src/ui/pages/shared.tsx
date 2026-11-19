@@ -83,12 +83,10 @@ export function NextDestination({ current }: { current: PlanetConfig }) {
         <span className="eyebrow">{c.ui.prev}</span>
         <Arrow dir="left" />
         <span className="next-title">{prev.name[lang]}</span>
-        <span className="next-orb" aria-hidden="true" />
       </RouteLink>
       <RouteLink to={{ kind: 'planet', id: next.id }} className="next-link next-next" style={{ ['--accent' as string]: next.color }}>
         <span className="eyebrow">{c.ui.next}</span>
         <span className="next-title">{next.name[lang]}</span>
-        <span className="next-orb" aria-hidden="true" />
         <Arrow />
       </RouteLink>
     </Reveal>

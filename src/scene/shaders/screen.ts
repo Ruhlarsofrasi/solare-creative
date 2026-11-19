@@ -85,6 +85,7 @@ ${demoVisual}
 void main(){
   vec2 uv = vUv;
   if (uFlip > 0.5) uv.x = 1.0 - uv.x;
+  if (!gl_FrontFacing) uv.x = 1.0 - uv.x;
   // hover is deliberately quiet: a slight push-in, never faster playback
   vec2 zuv = (uv - 0.5) * (1.0 - uHover * 0.025) + 0.5;
   vec3 col = demoVisual(zuv, uTime * 0.4 + uSeed * 40.0, uSeed, uA, uB, uC, uAspect);
@@ -98,9 +99,18 @@ void main(){
   vec4 ov = texture2D(uMap, uv);
   col = mix(col, ov.rgb, ov.a * 0.92);
   // monumental LED architecture: faint module seams
-  vec2 m = fract(uv * vec2(uAspect, 1.0) * 6.0);
-  float seam = smoothstep(0.0, 0.012, m.x) * smoothstep(0.0, 0.012, m.y);
-  col *= mix(0.72, 1.0, seam);
+  // The seams are thinner than a pixel at most distances. Drawn naively they
+  // alias and shimmer as the screen moves, so they are filtered to their true
+  // coverage: crisp up close, a steady faint tone far away, never flickering.
+  vec2 mg = uv * vec2(uAspect, 1.0) * 6.0;
+  vec2 dd = fwidth(mg);
+  vec2 drawW = clamp(vec2(0.012), dd, vec2(0.5));
+  vec2 gd = 1.0 - abs(fract(mg) * 2.0 - 1.0);
+  vec2 g2 = 1.0 - smoothstep(drawW - dd * 1.5, drawW + dd * 1.5, gd);
+  g2 *= clamp(0.012 / drawW, 0.0, 1.0);
+  g2 = mix(g2, vec2(0.012), clamp(dd * 2.0 - 1.0, 0.0, 1.0));
+  float grid = mix(g2.x, 1.0, g2.y);
+  col *= 1.0 - 0.28 * grid;
   // glass sheen
   vec3 V = normalize(cameraPosition - vWorld);
   float fres = pow(1.0 - abs(dot(normalize(vNormalW), V)), 3.0);

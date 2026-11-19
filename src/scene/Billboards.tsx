@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
-import { CanvasTexture, Color, DataTexture, DoubleSide, Group, Mesh, ShaderMaterial, SRGBColorSpace, TextureLoader, Vector3, VideoTexture } from 'three';
+import { CanvasTexture, Color, DataTexture, DoubleSide, FrontSide, Group, Mesh, ShaderMaterial, SRGBColorSpace, TextureLoader, Vector3, VideoTexture } from 'three';
 import { planetIndex, type PlanetConfig } from '../config/planets';
 import type { Lang } from '../config/site';
 import { projectSeed, projectsOf, type Project } from '../content/projects';
@@ -206,6 +206,7 @@ const frameColor = new Color('#1a1a18');
 function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetConfig; slot: number; seed: number }) {
   const lang = useStore((s) => s.lang);
   const portrait = useThree((s) => s.size.width / s.size.height < 0.9);
+  const maxAniso = useThree((s) => Math.min(8, s.gl.capabilities.getMaxAnisotropy()));
   const layout = useMemo(() => layoutFor(project, cfg, slot, portrait), [project, cfg, slot, portrait]);
   const group = useRef<Group>(null);
   const mesh = useRef<Mesh>(null);
@@ -213,11 +214,12 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
   const video = useRef<HTMLVideoElement | null>(null);
   const stopIndex = planetIndex(cfg.id) + 1;
 
-  const { mat, frameMat, canvas, texture } = useMemo(() => {
+  const { mat, frameMat, frameOuter, canvas, texture } = useMemo(() => {
     const canvas = document.createElement('canvas');
     canvas.width = canvas.height = 4;
     const texture = new CanvasTexture(canvas);
     texture.colorSpace = SRGBColorSpace;
+    texture.anisotropy = maxAniso;
     const mat = new ShaderMaterial({
       vertexShader: screenVertex,
       fragmentShader: screenFragment,
@@ -236,15 +238,24 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
         uMap: { value: texture },
         uVideo: { value: blank },
       },
+      // a curved screen is seen from inside its arc too; the shader un-mirrors the back faces
+      side: layout.curved ? DoubleSide : FrontSide,
     });
-    const frameMat = new ShaderMaterial({
+    // The frame sits a hair behind the picture. Polygon offset keeps the two from
+    // fighting over the same depth at a distance — that fight was the flicker.
+    const metal = {
       vertexShader: planetVertex,
       fragmentShader: metalFragment,
       uniforms: { uColor: { value: frameColor }, uFlat: { value: 0 } },
-      side: DoubleSide,
-    });
-    return { mat, frameMat, canvas, texture };
-  }, [project, layout, seed]);
+      polygonOffset: true,
+      polygonOffsetFactor: 2,
+      polygonOffsetUnits: 2,
+    };
+    const frameMat = new ShaderMaterial({ ...metal, side: DoubleSide });
+    // curved backing: outside faces only, so from inside the arc the picture shows instead
+    const frameOuter = new ShaderMaterial({ ...metal, side: FrontSide });
+    return { mat, frameMat, frameOuter, canvas, texture };
+  }, [project, layout, seed, maxAniso]);
 
   useEffect(() => {
     let alive = true;
@@ -308,6 +319,8 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
       (t) => {
         if (!alive) return;
         t.colorSpace = SRGBColorSpace;
+        t.anisotropy = maxAniso;
+        t.needsUpdate = true;
         mat.uniforms.uTexAspect.value = t.image.width / Math.max(t.image.height, 1);
         mat.uniforms.uVideo.value = t;
         mat.uniforms.uUseVideo.value = 1;
@@ -321,16 +334,17 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
       mat.uniforms.uVideo.value = blank;
       tex.dispose();
     };
-  }, [still, mat]);
+  }, [still, mat, maxAniso]);
 
   useEffect(
     () => () => {
       mat.dispose();
       frameMat.dispose();
+      frameOuter.dispose();
       texture.dispose();
       delete bridge.screens[project.slug];
     },
-    [mat, frameMat, texture, project.slug],
+    [mat, frameMat, frameOuter, texture, project.slug],
   );
 
   useFrame((_, dt) => {
@@ -400,7 +414,7 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
           <mesh ref={mesh} material={mat} onPointerOver={over} onPointerOut={out} onClick={click}>
             <cylinderGeometry args={[layout.radius, layout.radius, layout.h, 72, 1, true, -layout.arc / 2, layout.arc]} />
           </mesh>
-          <mesh material={frameMat}>
+          <mesh material={frameOuter}>
             <cylinderGeometry args={[layout.radius - d * 0.6, layout.radius - d * 0.6, layout.h + d * 2.4, 72, 1, true, -layout.arc / 2 - 0.02, layout.arc + 0.04]} />
           </mesh>
           {[-1, 1].map((sgn) => (
@@ -414,8 +428,12 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
           <mesh ref={mesh} material={mat} onPointerOver={over} onPointerOut={out} onClick={click}>
             <planeGeometry args={[layout.w, layout.h]} />
           </mesh>
-          <mesh material={frameMat} position={[0, 0, -d * 0.75]}>
+          <mesh material={frameMat} position={[0, 0, -d]}>
             <boxGeometry args={[layout.w + d * 2, layout.h + d * 2, d]} />
+          </mesh>
+          {/* the back carries the same picture, the right way round — no dark slab when the screen turns away */}
+          <mesh material={mat} position={[0, 0, -d * 1.75]} rotation={[0, Math.PI, 0]} onPointerOver={over} onPointerOut={out} onClick={click}>
+            <planeGeometry args={[layout.w, layout.h]} />
           </mesh>
         </>
       )}

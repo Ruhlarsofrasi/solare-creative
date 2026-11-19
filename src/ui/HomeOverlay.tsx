@@ -156,10 +156,27 @@ export function HomeOverlay() {
       </nav>
 
       <div className={`home-foot ${stop === 0 ? 'is-active' : ''}`}>
-        <p className="scroll-hint" aria-hidden="true">
-          <span className="scroll-line" />
-          {mobile ? c.ui.swipe : c.ui.scroll}
-        </p>
+        <div className="home-foot-start">
+          <p className="scroll-hint" aria-hidden="true">
+            <span className="scroll-line" />
+            {mobile ? c.ui.swipe : c.ui.scroll}
+          </p>
+          <p className="home-contact">
+            <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+            {site.contact.whatsapp && (
+              <>
+                {' · '}
+                <a href={`https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(c.contact.whatsappText)}`} target="_blank" rel="noopener noreferrer">
+                  WhatsApp
+                </a>
+              </>
+            )}
+            {' · '}
+            <a href={site.contact.instagram} target="_blank" rel="noopener noreferrer">
+              Instagram
+            </a>
+          </p>
+        </div>
         <p className="home-legal">
           © {new Date().getFullYear()} {site.name} · {site.location[lang]} ·{' '}
           <RouteLink to={{ kind: 'legal' }} tabIndex={stop === 0 ? 0 : -1}>

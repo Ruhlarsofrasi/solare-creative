@@ -1,4 +1,5 @@
 import { planets } from '../config/planets';
+import { site } from '../config/site';
 import { clamp } from '../lib/math';
 import { bridge } from '../state/bridge';
 
@@ -11,6 +12,10 @@ import { bridge } from '../state/bridge';
  *  • Destinations: each planet has its own chord, panned to the planet.
  *  • One-shots: flight whoosh, flare rumble, lunar chime.
  *
+ * If a music file is configured (site.audio.music → public/audio/ambient.mp3)
+ * and it loads, that file loops instead of the synthesised drone and chords;
+ * the one-shots stay. A missing file simply leaves the synthesised ambience on.
+ *
  * Starts silent. The context is only created after the visitor presses the
  * sound toggle (browser autoplay policy). Project audio ducks the ambience.
  */
@@ -18,6 +23,11 @@ class AudioEngine {
   private ctx: AudioContext | null = null;
   private master!: GainNode;
   private ambience!: GainNode;
+  /** Synthesised drone + chords: silenced while a music file is playing. */
+  private synth!: GainNode;
+  private musicGain!: GainNode;
+  private music: HTMLAudioElement | null = null;
+  private musicOk = false;
   private sunGain!: GainNode;
   private sunPan!: StereoPannerNode;
   private windFilter!: BiquadFilterNode;
@@ -43,6 +53,31 @@ class AudioEngine {
     this.ambience = ctx.createGain();
     this.ambience.gain.value = 1;
     this.ambience.connect(this.master);
+    this.synth = ctx.createGain();
+    this.synth.connect(this.ambience);
+    this.musicGain = ctx.createGain();
+    this.musicGain.gain.value = 0;
+    this.musicGain.connect(this.ambience);
+    if (site.audio.music) {
+      const el = new Audio();
+      el.loop = true;
+      el.preload = 'auto';
+      el.addEventListener('canplay', () => {
+        if (this.musicOk) return;
+        this.musicOk = true;
+        const t = ctx.currentTime;
+        this.synth.gain.setTargetAtTime(0, t, 0.8);
+        this.musicGain.gain.setTargetAtTime(clamp(site.audio.volume), t, 0.8);
+      });
+      el.addEventListener('error', () => (this.music = null)); // no file → synthesised ambience stays
+      el.src = site.audio.music;
+      try {
+        ctx.createMediaElementSource(el).connect(this.musicGain);
+        this.music = el;
+      } catch {
+        this.music = null;
+      }
+    }
 
     // brown noise buffer
     const len = ctx.sampleRate * 4;
@@ -60,7 +95,7 @@ class AudioEngine {
     this.sunGain = ctx.createGain();
     this.sunGain.gain.value = 0.2;
     this.sunPan = ctx.createStereoPanner();
-    this.sunGain.connect(this.sunPan).connect(this.ambience);
+    this.sunGain.connect(this.sunPan).connect(this.synth);
     const lp = ctx.createBiquadFilter();
     lp.type = 'lowpass';
     lp.frequency.value = 180;
@@ -100,7 +135,7 @@ class AudioEngine {
       const filter = ctx.createBiquadFilter();
       filter.type = 'lowpass';
       filter.frequency.value = 900;
-      filter.connect(gain).connect(pan).connect(this.ambience);
+      filter.connect(gain).connect(pan).connect(this.synth);
       [1, 1.5, 2.005, 2.52].forEach((ratio, i) => {
         const o = ctx.createOscillator();
         o.type = i === 0 ? 'triangle' : 'sine';
@@ -126,6 +161,8 @@ class AudioEngine {
     if (!this.ctx) return false;
     this.enabled = on;
     if (on) {
+      // started inside the tap that turned sound on (mobile autoplay rules)
+      this.music?.play().catch(() => undefined);
       await this.ctx.resume().catch(() => undefined);
       this.master.gain.setTargetAtTime(0.5, this.ctx.currentTime, 0.6);
       cancelAnimationFrame(this.raf);
@@ -133,7 +170,11 @@ class AudioEngine {
     } else {
       this.master.gain.setTargetAtTime(0, this.ctx.currentTime, 0.25);
       cancelAnimationFrame(this.raf);
-      window.setTimeout(() => !this.enabled && this.ctx?.suspend().catch(() => undefined), 900);
+      window.setTimeout(() => {
+        if (this.enabled) return;
+        this.music?.pause();
+        this.ctx?.suspend().catch(() => undefined);
+      }, 900);
     }
     return true;
   }

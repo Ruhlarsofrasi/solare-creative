@@ -32,6 +32,17 @@ export const site = {
     extraFields: {} as Record<string, string>,
   },
 
+  audio: {
+    /**
+     * Your own music / ambience. Put the file at public/audio/ambient.mp3
+     * (or change this path). It loops when the visitor turns sound on.
+     * While the file is missing, the built-in synthesised ambience plays instead.
+     */
+    music: '/audio/ambient.mp3',
+    /** 0..1 */
+    volume: 0.8,
+  },
+
   analytics: {
     /**
      * Privacy-respecting analytics. Disabled until configured.

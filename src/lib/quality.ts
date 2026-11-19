@@ -12,16 +12,7 @@ export interface TierSettings {
   nebula: boolean;
 }
 
-/**
- * `scale` is the adaptive resolution factor: when frames drop, only the render
- * resolution is lowered — the look of the scene (sun, bloom, detail) never changes mid-visit.
- */
-export const tierSettings = (tier: Tier, scale = 1): TierSettings => {
-  const s = tierBase(tier);
-  return { ...s, dpr: Math.max(0.6, s.dpr * scale) };
-};
-
-const tierBase = (tier: Tier): TierSettings => {
+export const tierSettings = (tier: Tier): TierSettings => {
   const device = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
   switch (tier) {
     case 'high':
