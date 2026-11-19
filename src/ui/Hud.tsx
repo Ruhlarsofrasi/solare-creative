@@ -4,7 +4,7 @@ import { site } from '../config/site';
 import { audio } from '../audio/AudioEngine';
 import { pathFor } from '../lib/router';
 import { goToStop, skipIntro } from '../hooks/useJourneyInput';
-import { triggerAlignment } from '../scene/Secrets';
+import { triggerEclipse } from '../scene/Secrets';
 import { useStore } from '../state/store';
 import { LogoMark, RouteLink, useCopy } from './bits';
 
@@ -27,6 +27,12 @@ export function Hud() {
   const introDone = useStore((s) => s.introDone);
   const route = useStore((s) => s.route);
   const set = useStore((s) => s.set);
+  const volume = useStore((s) => s.volume);
+  const setVolume = useStore((s) => s.setVolume);
+  const aligned = useStore((s) => s.aligned);
+  const setAligned = useStore((s) => s.setAligned);
+
+  useEffect(() => audio.setVolume(volume), [volume]);
 
   return (
     <header className={`hud ${ready ? 'is-ready' : ''}`}>
@@ -37,13 +43,13 @@ export function Hud() {
         onClick={() => {
           skipIntro();
           goToStop(0);
-          // secret: five quick taps on the mark summon the alignment (touch twin of typing "solare")
+          // secret: five quick taps on the mark bring on the eclipse (touch twin of typing "solare")
           const now = performance.now();
           taps.n = now - taps.t < 600 ? taps.n + 1 : 1;
           taps.t = now;
           if (taps.n >= 5) {
             taps.n = 0;
-            triggerAlignment();
+            triggerEclipse();
           }
         }}
       >
@@ -75,6 +81,23 @@ export function Hud() {
             </a>
           ))}
         </div>
+        {route.kind === 'home' && (
+          <button
+            type="button"
+            role="switch"
+            aria-checked={aligned}
+            className={`switch ${aligned ? 'is-on' : ''}`}
+            onClick={() => setAligned(!aligned)}
+            title={c.ui.alignHint}
+            aria-label={`${c.ui.align} — ${c.ui.alignHint}`}
+          >
+            <span className="switch-label">{c.ui.align}</span>
+            <span className="switch-track" aria-hidden="true">
+              <span className="switch-thumb" />
+            </span>
+          </button>
+        )}
+        <div className={`sound-wrap ${sound ? 'is-on' : ''}`}>
         <button className={`sound ${sound ? 'is-on' : ''}`} onClick={toggleSound} aria-pressed={sound} aria-label={sound ? c.ui.soundOff : c.ui.soundOn} title={sound ? c.ui.soundOff : c.ui.soundOn}>
           <span className="sound-bars" aria-hidden="true">
             <i />
@@ -84,6 +107,19 @@ export function Hud() {
           </span>
           <span className="sound-label">{c.ui.sound}</span>
         </button>
+          <input
+            type="range"
+            className="volume"
+            min={0}
+            max={1}
+            step={0.01}
+            value={volume}
+            onChange={(e) => setVolume(parseFloat(e.target.value))}
+            aria-label={c.ui.volume}
+            tabIndex={sound ? 0 : -1}
+            style={{ ['--v' as string]: `${Math.round(volume * 100)}%` }}
+          />
+        </div>
         <button className={`menu-btn ${menuOpen ? 'is-open' : ''}`} onClick={() => set({ menuOpen: !menuOpen })} aria-expanded={menuOpen} aria-controls="site-menu" aria-label={menuOpen ? c.ui.close : c.ui.menu}>
           <span className="menu-btn-label">{menuOpen ? c.ui.close : c.ui.menu}</span>
           <span className="menu-btn-icon" aria-hidden="true">

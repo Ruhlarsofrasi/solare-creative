@@ -180,6 +180,8 @@ export function Sun() {
   const onClick = (e: ThreeEvent<MouseEvent>) => {
     const s = useStore.getState();
     if (s.route.kind !== 'home' || bridge.intro < 1 || e.delta > 6) return;
+    // a planet hidden behind the sun takes the click: the event carries on to it
+    if (e.intersections.some((i) => i.object.userData.planetHit)) return;
     e.stopPropagation();
     const local = group.current ? group.current.worldToLocal(e.point.clone()) : e.point.clone();
     if (triggerFlare(local)) s.discover('flare');

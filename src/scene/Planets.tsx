@@ -26,7 +26,7 @@ const HAS_2K = new Set(['earth.jpg', 'jupiter.jpg', 'mars.jpg', 'venus.jpg']);
  * High-resolution planet maps live in /public/textures (see README for credits).
  * Replace a file there to swap a planet's surface. Textures are shared and cached.
  */
-function useMap(file: string | null, onLoad?: () => void) {
+export function useMap(file: string | null, onLoad?: () => void) {
   const gl = useThree((s) => s.gl);
   return useMemo(() => {
     const mobile = useStore.getState().mobile;
@@ -309,7 +309,7 @@ function Planet({ cfg }: { cfg: PlanetConfig }) {
         </mesh>
       )}
       {/* generous invisible hit target */}
-      <mesh onPointerOver={over} onPointerOut={out} onPointerDown={down} onClick={click}>
+      <mesh userData={{ planetHit: true }} onPointerOver={over} onPointerOut={out} onPointerDown={down} onClick={click}>
         <sphereGeometry args={[cfg.radius * 1.5, 16, 12]} />
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>

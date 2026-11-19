@@ -7,7 +7,7 @@ import { parsePath, pathFor, sameRoute, type Route } from '../lib/router';
 import { detectTier, isMobileDevice, webglAvailable, type QualityPref, type Tier } from '../lib/quality';
 import { bridge } from './bridge';
 
-export type SecretId = 'flare' | 'alignment' | 'chime' | 'comet';
+export type SecretId = 'flare' | 'eclipse' | 'chime' | 'comet';
 type MotionPref = 'system' | 'reduced' | 'full';
 
 const ls = {
@@ -32,6 +32,8 @@ const initial = parsePath(window.location.pathname);
 const initialMotion = (ls.get('solare.motion') as MotionPref) || 'system';
 const initialQuality = (ls.get('solare.quality') as QualityPref) || 'auto';
 const detected = detectTier();
+const storedVolume = parseFloat(ls.get('solare.volume') ?? '');
+const initialVolume = Number.isFinite(storedVolume) ? Math.min(1, Math.max(0, storedVolume)) : 1;
 
 interface State {
   lang: Lang;
@@ -45,6 +47,10 @@ interface State {
   hovered: string | null;
   menuOpen: boolean;
   sound: boolean;
+  /** 0..1, remembered per visitor. */
+  volume: number;
+  /** Accessibility: planets held in one straight line (easier to reach). Remembered per visitor. */
+  aligned: boolean;
   qualityPref: QualityPref;
   autoTier: Tier;
   tier: Tier;
@@ -63,6 +69,8 @@ interface State {
   setLang: (lang: Lang) => void;
   set: (partial: Partial<State>) => void;
   setQuality: (q: QualityPref) => void;
+  setVolume: (v: number) => void;
+  setAligned: (on: boolean) => void;
   setMotion: (m: MotionPref) => void;
   discover: (id: SecretId) => void;
 }
@@ -96,6 +104,8 @@ export const useStore = create<State>((set, get) => ({
   hovered: null,
   menuOpen: false,
   sound: false,
+  volume: initialVolume,
+  aligned: ls.get('solare.align') === '1',
   qualityPref: initialQuality,
   autoTier: detected,
   tier: resolveTier(initialQuality, detected),
@@ -154,6 +164,17 @@ export const useStore = create<State>((set, get) => ({
   setQuality: (q) => {
     ls.set('solare.quality', q);
     set({ qualityPref: q, tier: resolveTier(q, get().autoTier) });
+  },
+
+  setVolume: (v) => {
+    const volume = Math.min(1, Math.max(0, v));
+    ls.set('solare.volume', String(volume));
+    set({ volume });
+  },
+
+  setAligned: (on) => {
+    ls.set('solare.align', on ? '1' : '0');
+    set({ aligned: on });
   },
 
   setMotion: (m) => {

@@ -70,7 +70,7 @@ interface Copy {
   project: Record<string, string>;
   legal: { title: string; note: string; sections: { title: string; text: string[] }[] };
   notFound: { code: string; title: string; text: string; cta: string };
-  secrets: Record<'flare' | 'alignment' | 'chime' | 'comet', string>;
+  secrets: Record<'flare' | 'eclipse' | 'chime' | 'comet', string>;
   ring: string;
 }
 
@@ -95,6 +95,9 @@ export const copy: Record<Lang, Copy> = {
       soundOn: 'Sesi aç',
       soundOff: 'Sesi kapat',
       sound: 'Ses',
+      volume: 'Ses seviyesi',
+      align: 'Hizala',
+      alignHint: 'Gezegenleri tek sıraya diz — tıklaması kolaylaşır',
       language: 'Dil',
       destinations: 'Destinasyonlar',
       overview: 'Güneş Sistemi',
@@ -328,7 +331,7 @@ export const copy: Record<Lang, Copy> = {
     },
     secrets: {
       flare: 'Güneş püskürmesi',
-      alignment: 'Büyük hizalanma',
+      eclipse: 'Tam güneş tutulması',
       chime: 'Ay rezonansı',
       comet: 'Geçen kuyruklu yıldız',
     },
@@ -354,6 +357,9 @@ export const copy: Record<Lang, Copy> = {
       swipe: 'Swipe to travel',
       soundOn: 'Turn sound on',
       soundOff: 'Turn sound off',
+      volume: 'Volume',
+      align: 'Align',
+      alignHint: 'Line the planets up in a row — easier to reach',
       sound: 'Sound',
       language: 'Language',
       destinations: 'Destinations',
@@ -588,7 +594,7 @@ export const copy: Record<Lang, Copy> = {
     },
     secrets: {
       flare: 'Solar eruption',
-      alignment: 'The grand alignment',
+      eclipse: 'A total solar eclipse',
       chime: 'Lunar resonance',
       comet: 'A passing comet',
     },

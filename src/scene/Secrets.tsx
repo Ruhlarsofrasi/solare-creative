@@ -1,25 +1,100 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { AdditiveBlending, CanvasTexture, DoubleSide, Group, Mesh, MeshBasicMaterial, RepeatWrapping, ShaderMaterial, SRGBColorSpace, Vector3 } from 'three';
+import { AdditiveBlending, CanvasTexture, Color, DataTexture, DoubleSide, Group, Mesh, MeshBasicMaterial, RepeatWrapping, ShaderMaterial, SRGBColorSpace, Vector3 } from 'three';
 import gsap from 'gsap';
+import { SUN_RADIUS } from '../config/planets';
 import { copy } from '../content/copy';
 import { bridge } from '../state/bridge';
 import { useStore } from '../state/store';
+import { useMap } from './Planets';
 import { tail } from './shaders/noise';
+import { planetFragment, planetVertex } from './shaders/planets';
 import { billboardVertex } from './shaders/sun';
 
-let alignTween: gsap.core.Timeline | null = null;
+let eclipseTl: gsap.core.Timeline | null = null;
 
-/** Secret: the grand alignment — every planet falls into a single line for a few seconds. */
-export function triggerAlignment() {
-  if (alignTween?.isActive()) return false;
-  const reduced = useStore.getState().reducedMotion;
-  alignTween = gsap
-    .timeline()
-    .to(bridge, { align: 1, duration: reduced ? 0.01 : 4.5, ease: 'power2.inOut' })
-    .to(bridge, { align: 0, duration: reduced ? 0.01 : 5, ease: 'power2.inOut', delay: 9 });
-  useStore.getState().discover('alignment');
+/**
+ * Secret (type ''solare'', or tap the logo five times): a total solar eclipse.
+ * The Moon slides in front of the sun, holds at totality so only the corona
+ * burns around it, then slides away.
+ */
+export function triggerEclipse() {
+  if (eclipseTl?.isActive()) return false;
+  bridge.eclipseX = 3;
+  bridge.eclipseOn = 1;
+  eclipseTl = gsap
+    .timeline({ onComplete: () => (bridge.eclipseOn = 0) })
+    .to(bridge, { eclipseX: 0, duration: 6, ease: 'power2.out' })
+    .to(bridge, { eclipseX: -3, duration: 6, ease: 'power2.in', delay: 4 });
+  useStore.getState().discover('eclipse');
   return true;
+}
+
+/** Accessibility switch: hold every planet on one straight line, or let them orbit freely. */
+function applyAlignment(on: boolean, instant = false) {
+  gsap.killTweensOf(bridge, 'align');
+  const reduced = useStore.getState().reducedMotion;
+  if (instant || reduced) bridge.align = on ? 1 : 0;
+  else gsap.to(bridge, { align: on ? 1 : 0, duration: 4.5, ease: 'power2.inOut' });
+}
+
+const blank = new DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1);
+blank.needsUpdate = true;
+const toSun = new Vector3();
+const side = new Vector3();
+const lift = new Vector3();
+const UP = new Vector3(0, 1, 0);
+
+/** The eclipsing Moon: lit only from behind by the sun, so it reads as a black disc with the faintest earthshine. */
+function EclipseMoon() {
+  const ref = useRef<Mesh>(null);
+  const mat = useMemo(
+    () =>
+      new ShaderMaterial({
+        vertexShader: planetVertex,
+        fragmentShader: planetFragment('moon'),
+        uniforms: {
+          uTime: { value: 0 },
+          uHover: { value: 0 },
+          uReady: { value: 0 },
+          uAtmo: { value: new Color('#ffffff') },
+          uFallback: { value: new Color('#2a2826') },
+          uMap: { value: blank },
+          uNight: { value: blank },
+          uClouds: { value: blank },
+        },
+        defines: { OCT: 3 },
+      }),
+    [],
+  );
+  mat.uniforms.uMap.value = useMap('moon.jpg', () => (mat.uniforms.uReady.value = 1));
+  useEffect(() => () => mat.dispose(), [mat]);
+  useFrame((state) => {
+    const m = ref.current;
+    if (!m) return;
+    m.visible = bridge.eclipseOn > 0;
+    if (!m.visible) return;
+    const cam = state.camera;
+    toSun.copy(cam.position).negate();
+    const dist = toSun.length();
+    toSun.normalize();
+    // well in front of the sun, and a touch larger than it on screen so totality is complete
+    const D = dist * 0.42;
+    const r = D * Math.tan(Math.asin(Math.min(SUN_RADIUS / dist, 0.99)) * 1.035);
+    side.crossVectors(toSun, UP).normalize();
+    lift.crossVectors(side, toSun).normalize();
+    m.scale.setScalar(r);
+    m.position
+      .copy(cam.position)
+      .addScaledVector(toSun, D)
+      .addScaledVector(side, bridge.eclipseX * r)
+      .addScaledVector(lift, bridge.eclipseX * r * 0.22);
+  });
+  return (
+    <mesh ref={ref} material={mat} visible={false} renderOrder={1}>
+      <sphereGeometry args={[1, 64, 48]} />
+    </mesh>
+  );
 }
 
 const cometFragment = /* glsl */ `
@@ -104,7 +179,15 @@ export function Secrets() {
     [cometMat, ringMat, texture],
   );
 
-  // typing "solare" anywhere summons the alignment
+  // the alignment switch (persisted) drives the planets
+  useEffect(() => {
+    applyAlignment(useStore.getState().aligned, true);
+    return useStore.subscribe((s, prev) => {
+      if (s.aligned !== prev.aligned) applyAlignment(s.aligned);
+    });
+  }, []);
+
+  // typing "solare" anywhere on the orbit brings on the eclipse
   useEffect(() => {
     let buffer = '';
     const onKey = (e: KeyboardEvent) => {
@@ -112,7 +195,7 @@ export function Secrets() {
       if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT')) return;
       if (e.key.length !== 1) return;
       buffer = (buffer + e.key.toLowerCase()).slice(-6);
-      if (buffer === 'solare' && useStore.getState().route.kind === 'home') triggerAlignment();
+      if (buffer === 'solare' && useStore.getState().route.kind === 'home') triggerEclipse();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -165,6 +248,7 @@ export function Secrets() {
 
   return (
     <>
+      <EclipseMoon />
       <group ref={comet} visible={false}>
         <mesh material={cometMat} position={[12, 0, 0]}>
           <planeGeometry args={[30, 6]} />

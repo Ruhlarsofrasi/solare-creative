@@ -110,12 +110,15 @@ export function Magnetic({ text, as: Tag = 'span', className, strength = 1, id, 
     };
   }, [text, reduced, strength]);
 
+  // running letter index (and the middle of the word) let CSS spread the letters with transforms only
+  let n = 0;
+  const total = Array.from(text.replace(/ /g, '')).length;
   return (
-    <Tag ref={root} id={id} className={`magnetic ${className ?? ''}`} aria-label={text} onClick={onClick}>
+    <Tag ref={root} id={id} className={`magnetic ${className ?? ''}`} aria-label={text} onClick={onClick} style={{ ['--mid' as string]: (total - 1) / 2 }}>
       {text.split(' ').map((word, w, all) => (
         <span key={w} aria-hidden="true" className="magnetic-word">
           {Array.from(word).map((ch, i) => (
-            <span key={i} data-m className={`magnetic-letter ${glyphs?.[ch] ? 'magnetic-glyph' : ''}`}>
+            <span key={i} data-m className={`magnetic-letter ${glyphs?.[ch] ? 'magnetic-glyph' : ''}`} style={{ ['--i' as string]: n++ }}>
               {glyphs?.[ch] ?? ch}
             </span>
           ))}

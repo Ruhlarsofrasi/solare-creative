@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
+import { Vector3 } from 'three';
+import { SUN_RADIUS } from '../config/planets';
 import { planets } from '../config/planets';
 import { site } from '../config/site';
 import { projectBySlug } from '../content/projects';
 import { goToStop } from '../hooks/useJourneyInput';
 import { bridge, toScreen } from '../state/bridge';
 import { useStore } from '../state/store';
-import { triggerAlignment } from '../scene/Secrets';
+import { triggerEclipse } from '../scene/Secrets';
 import { Arrow, LogoMark, RouteLink, useCopy } from './bits';
 import { Magnetic } from './Magnetic';
 
 const pt = { x: 0, y: 0 };
+const sunP = new Vector3();
+const sunE = new Vector3();
+const plE = new Vector3();
 
 /** Labels that track planets / hovered screens in screen space. */
 function Labels() {
@@ -18,6 +23,7 @@ function Labels() {
   const hovered = useStore((s) => s.hovered);
   const stop = useStore((s) => s.stop);
   const refs = useRef<(HTMLDivElement | null)[]>([]);
+  const texts = useRef<(HTMLSpanElement | null)[]>([]);
   const screenRef = useRef<HTMLDivElement>(null);
   const project = hovered?.startsWith('project:') ? projectBySlug(hovered.slice(8)) : undefined;
 
@@ -25,12 +31,52 @@ function Labels() {
     let raf = 0;
     const tick = () => {
       raf = requestAnimationFrame(tick);
+      // the sun's disc on screen, so labels can turn dark where they cross it
+      const cam = bridge.camera;
+      let sx = 0;
+      let sy = 0;
+      let sr = 0;
+      if (cam) {
+        sunP.set(0, 0, 0).project(cam);
+        if (sunP.z < 1) {
+          sunE.setFromMatrixColumn(cam.matrixWorld, 1).multiplyScalar(SUN_RADIUS * 1.03).project(cam);
+          sx = ((sunP.x + 1) / 2) * window.innerWidth;
+          sy = ((1 - sunP.y) / 2) * window.innerHeight;
+          sr = Math.hypot(((sunE.x - sunP.x) / 2) * window.innerWidth, ((sunE.y - sunP.y) / 2) * window.innerHeight);
+        }
+      }
+      // read phase (label text boxes), then write phase
+      const boxes = texts.current.map((t) => (t ? { l: t.offsetLeft, w: t.offsetWidth, h: t.offsetHeight } : null));
       planets.forEach((p, i) => {
         const el = refs.current[i];
         if (!el) return;
         const ok = toScreen(bridge.planetPos[p.id], pt);
         el.style.transform = `translate3d(${pt.x.toFixed(1)}px,${pt.y.toFixed(1)}px,0)`;
         el.style.visibility = ok ? 'visible' : 'hidden';
+        const t = texts.current[i];
+        const b = boxes[i];
+        if (!t || !b) return;
+        const x0 = pt.x + b.l;
+        const y0 = pt.y - b.h / 2;
+        const nx = Math.max(x0, Math.min(sx, x0 + b.w));
+        const ny = Math.max(y0, Math.min(sy, y0 + b.h));
+        const over = sr > 0 && Math.hypot(sx - nx, sy - ny) < sr;
+        t.classList.toggle('is-eclipsed', over);
+        if (over && cam) {
+          t.style.setProperty('--cx', `${(sx - x0).toFixed(1)}px`);
+          t.style.setProperty('--cy', `${(sy - y0).toFixed(1)}px`);
+          t.style.setProperty('--sr', `${sr.toFixed(1)}px`);
+          // a planet in front of the sun hides it: over the planet's own disc the name stays light
+          const P = bridge.planetPos[p.id];
+          let pr = 0;
+          if (cam.position.distanceTo(P) < cam.position.length()) {
+            plE.setFromMatrixColumn(cam.matrixWorld, 1).multiplyScalar(p.radius).add(P).project(cam);
+            pr = Math.hypot(((plE.x + 1) / 2) * window.innerWidth - pt.x, ((1 - plE.y) / 2) * window.innerHeight - pt.y);
+          }
+          t.style.setProperty('--px', `${(pt.x - x0).toFixed(1)}px`);
+          t.style.setProperty('--py', `${(pt.y - y0).toFixed(1)}px`);
+          t.style.setProperty('--pr', `${pr.toFixed(1)}px`);
+        }
       });
       const h = useStore.getState().hovered;
       const el = screenRef.current;
@@ -48,7 +94,19 @@ function Labels() {
       {planets.map((p, i) => (
         <div key={p.id} ref={(el) => (refs.current[i] = el)} className={`label ${hovered === p.id ? 'is-hover' : ''} ${stop === 0 ? 'is-map' : ''} ${stop === i + 1 ? 'is-here' : ''}`}>
           <span className="label-dot" />
-          <span className="label-text">
+          {/* the name is also a target: a planet behind the sun can still be reached by its label */}
+          <span
+            ref={(el) => (texts.current[i] = el)}
+            className="label-text"
+            onPointerEnter={() => useStore.setState({ hovered: p.id })}
+            onPointerLeave={() => useStore.getState().hovered === p.id && useStore.setState({ hovered: null })}
+            onClick={() => {
+              const s = useStore.getState();
+              if (s.route.kind !== 'home' || bridge.intro < 1) return;
+              if (s.stop !== i + 1) goToStop(i + 1);
+              else s.navigate({ kind: 'planet', id: p.id });
+            }}
+          >
             {p.name[lang]}
           </span>
         </div>
@@ -95,14 +153,14 @@ export function HomeOverlay() {
   const visible = route.kind === 'home';
   const planet = stop > 0 ? planets[stop - 1] : null;
 
-  // secret: five quick taps on the wordmark summon the alignment (touch-friendly twin of typing "solare")
+  // secret: five quick taps on the wordmark bring on the eclipse (touch-friendly twin of typing "solare")
   const tapWordmark = () => {
     const now = performance.now();
     taps.current.n = now - taps.current.t < 600 ? taps.current.n + 1 : 1;
     taps.current.t = now;
     if (taps.current.n >= 5) {
       taps.current.n = 0;
-      triggerAlignment();
+      triggerEclipse();
     }
   };
 

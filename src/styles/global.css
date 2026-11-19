@@ -403,6 +403,100 @@ html:not([data-route='home']) .hud {
 .sound.is-on {
   color: var(--ivory);
 }
+.sound-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+/* volume: appears beside the sound control while sound is on */
+.volume {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0;
+  height: 16px;
+  margin: 0;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  transition: width 0.5s var(--ease), opacity 0.4s;
+}
+.sound-wrap.is-on .volume {
+  width: 68px;
+  opacity: 1;
+  pointer-events: auto;
+}
+.volume::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--ivory) var(--v), var(--line) var(--v));
+}
+.volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: var(--ivory);
+}
+.volume::-moz-range-track {
+  height: 2px;
+  background: var(--line);
+}
+.volume::-moz-range-progress {
+  height: 2px;
+  background: var(--ivory);
+}
+.volume::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ivory);
+}
+/* alignment switch (accessibility) */
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  color: var(--mute);
+  letter-spacing: inherit;
+  transition: color 0.3s;
+}
+.switch:hover,
+.switch.is-on {
+  color: var(--ivory);
+}
+.switch-label {
+  text-transform: uppercase;
+}
+.switch-track {
+  position: relative;
+  width: 26px;
+  height: 14px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  transition: background 0.3s, border-color 0.3s;
+}
+.switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  transition: transform 0.35s var(--ease), background 0.3s;
+}
+.switch.is-on .switch-track {
+  background: var(--amber);
+  border-color: var(--amber);
+}
+.switch.is-on .switch-thumb {
+  transform: translateX(12px);
+  background: #0b0a08;
+}
 .sound-bars {
   display: flex;
   align-items: center;
@@ -646,16 +740,22 @@ html:not([data-route='home']) .hud {
   font-weight: 300;
   font-size: clamp(40px, 8.2vw, 126px);
   line-height: 0.9;
-  letter-spacing: 0.5em;
-  margin-right: -0.5em;
-  color: var(--ivory);
-  text-shadow: 0 0 90px rgba(232, 160, 80, 0.35);
-  transition: letter-spacing 3s var(--ease);
-  user-select: none;
-}
-.home.is-revealed .wordmark {
   letter-spacing: 0.24em;
   margin-right: -0.24em;
+  color: var(--ivory);
+  text-shadow: 0 0 90px rgba(232, 160, 80, 0.35);
+  user-select: none;
+  /* extra space each letter starts with before it settles */
+  --spread: 0.26em;
+}
+/* The settle is transform-only: the word is laid out once at its final spacing and
+   each letter glides in from its spread position on the GPU — no per-frame layout. */
+.wordmark .magnetic-letter {
+  transform: translate3d(calc((var(--i) - var(--mid)) * var(--spread)), 0, 0);
+  transition: transform 3s var(--ease);
+}
+.home.is-revealed .wordmark .magnetic-letter {
+  transform: none;
 }
 /* the brand mark stands in for the O: same cap height, same ink, optically centred */
 .wordmark-mark {
@@ -824,6 +924,24 @@ html:not([data-route='home']) .hud {
   color: var(--ivory);
   opacity: 0;
   transition: opacity 0.5s var(--ease), left 0.5s var(--ease);
+}
+/* names are targets too — a planet hidden behind the sun is reachable by its label */
+.label.is-map .label-text,
+.label.is-hover .label-text {
+  pointer-events: auto;
+  cursor: pointer;
+}
+/* where a name crosses the sun's disc, that part of it turns dark */
+.label-text.is-eclipsed {
+  color: transparent;
+  background-image:
+    radial-gradient(circle at var(--px) var(--py), var(--ivory) var(--pr), transparent calc(var(--pr) + 0.5px)),
+    radial-gradient(circle at var(--cx) var(--cy), #140d06 var(--sr), var(--ivory) calc(var(--sr) + 0.5px));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.label.is-map .label-text.is-eclipsed {
+  opacity: 0.92;
 }
 .label-text em {
   font-style: normal;
@@ -2108,6 +2226,11 @@ html:not([data-route='home']) .hud {
   .hud-actions {
     gap: 18px;
   }
+  /* phones have hardware volume; the switch keeps only its track */
+  .volume,
+  .switch-label {
+    display: none;
+  }
   .hud-mark {
     width: 34px;
   }
@@ -2124,9 +2247,10 @@ html:not([data-route='home']) .hud {
   .wordmark {
     font-size: clamp(38px, 12.5vw, 76px);
   }
-  .home.is-revealed .wordmark {
+  .wordmark {
     letter-spacing: 0.2em;
     margin-right: -0.2em;
+    --spread: 0.3em;
   }
   .hero-sub {
     display: none;

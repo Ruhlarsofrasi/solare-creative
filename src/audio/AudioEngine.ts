@@ -33,6 +33,7 @@ class AudioEngine {
   private windFilter!: BiquadFilterNode;
   private voices: { gain: GainNode; pan: StereoPannerNode }[] = [];
   private enabled = false;
+  private volume = 1;
   private ducked = false;
   private raf = 0;
   private noiseBuffer: AudioBuffer | null = null;
@@ -164,7 +165,7 @@ class AudioEngine {
       // started inside the tap that turned sound on (mobile autoplay rules)
       this.music?.play().catch(() => undefined);
       await this.ctx.resume().catch(() => undefined);
-      this.master.gain.setTargetAtTime(0.5, this.ctx.currentTime, 0.6);
+      this.master.gain.setTargetAtTime(0.5 * this.volume, this.ctx.currentTime, 0.6);
       cancelAnimationFrame(this.raf);
       this.loop();
     } else {
@@ -177,6 +178,12 @@ class AudioEngine {
       }, 900);
     }
     return true;
+  }
+
+  /** Master volume 0..1 (the visitor's slider). */
+  setVolume(v: number) {
+    this.volume = clamp(v);
+    if (this.ctx && this.enabled) this.master.gain.setTargetAtTime(0.5 * this.volume, this.ctx.currentTime, 0.06);
   }
 
   /** Project audio takes priority over the ambience. */
