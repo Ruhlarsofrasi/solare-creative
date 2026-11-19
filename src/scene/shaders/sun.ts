@@ -90,6 +90,7 @@ uniform float uTime;
 uniform float uSize;   // half size of the quad in sun radii
 uniform float uEdge;   // apparent silhouette scale (perspective correction)
 uniform float uFlare;
+uniform float uDim;    // 1 = normal, ~0 during a total eclipse
 varying vec2 vUv;
 ${noise}
 void main(){
@@ -119,12 +120,13 @@ void main(){
   vec3 far = vec3(0.75, 0.2, 0.04);
   vec3 c = mix(warm, hot, inner);
   c = mix(far, c, clamp(mid * 1.6, 0.0, 1.0));
-  gl_FragColor = vec4(c * i * 1.25, 1.0);
+  gl_FragColor = vec4(c * i * 1.25 * uDim, 1.0);
   ${tail}
 }`;
 
 /** Inner chromosphere shell (back faces) — gives the horizon glow in close-ups. */
 export const shellFragment = /* glsl */ `
+uniform float uDim;
 uniform float uTime;
 uniform float uFlare;
 uniform float uNorm;
@@ -139,7 +141,7 @@ void main(){
   float n = snoise(normalize(vObj) * 5.0 + vec3(0.0, uTime * 0.12, 0.0)) * 0.5 + 0.5;
   float i = pow(f, 2.4) * (0.75 + n * 0.5);
   vec3 c = mix(vec3(1.0, 0.3, 0.05), vec3(1.0, 0.75, 0.4), pow(f, 4.0));
-  gl_FragColor = vec4(c * i * (1.6 + uFlare * 1.5), 1.0);
+  gl_FragColor = vec4(c * i * (1.6 + uFlare * 1.5) * uDim, 1.0);
   ${tail}
 }`;
 

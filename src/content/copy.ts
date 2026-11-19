@@ -6,7 +6,7 @@ import type { PlanetId } from '../config/planets';
  *
  * Voice: short, plain, confident. No superlatives, no unverifiable claims
  * (team size, clients, awards, equipment). FPV is not offered.
- * Approved line: “Süslü değil; doğru.”
+ * No comma-heavy list sentences in prose. No hotel names.
  */
 
 export interface ServiceCopy {
@@ -126,7 +126,7 @@ export const copy: Record<Lang, Copy> = {
       motion: 'Hareket',
       motionFull: 'Tam',
       motionReduced: 'Azaltılmış',
-      loading: 'Yükleniyor',
+      loading: 'Işık hazırlanıyor',
       skipIntro: 'Girişi geç',
       legal: 'Yasal bilgiler',
       privacy: 'Gizlilik',
@@ -142,7 +142,7 @@ export const copy: Record<Lang, Copy> = {
       write: 'Yaz',
     },
     home: {
-      tagline: 'Süslü değil; doğru.',
+      tagline: 'Atmosferi yakalıyoruz.',
       sub: 'Antalya’da otel ve turizm sektörü için film, fotoğraf ve sosyal medya içeriği üretiyoruz.',
       positioning: 'Otel ve Turizm Prodüksiyonu · Antalya',
       overviewTitle: 'Solare Creative',
@@ -164,7 +164,7 @@ export const copy: Record<Lang, Copy> = {
           { title: 'Deneyim filmleri', text: 'Restoran, spa, süit ya da etkinlik alanına odaklanan kısa filmler.' },
         ],
         deliverablesTitle: 'Teslim',
-        deliverables: ['4K ana film', '30 ve 15 saniyelik versiyonlar', 'Yatay, kare ve dikey kurgular', 'Sessiz izlemeye uygun, altyazılı versiyonlar'],
+        deliverables: ['4K ana film', '30 ve 15 saniyelik versiyonlar', 'Yatay ve dikey kurgular'],
         workTitle: 'Projeler',
         workNote: 'Buradakiler örnek konseptlerdir. Gerçek projeler yayınlandıkça eklenecek.',
       },
@@ -210,8 +210,8 @@ export const copy: Record<Lang, Copy> = {
         eyebrow: 'Hizmet',
         lede: 'Yapay zekâ destekli görsel üretim, motion grafik ve CGI.',
         body: [
-          'Yapay zekâyı konsept görseller, kampanya varyasyonları ve henüz çekilmemiş sahnelerin ön görselleştirmesi için kullanıyoruz. Yapay zekâyla üretilen görselleri her zaman açıkça belirtiriz.',
-          'Logo animasyonu, başlık tasarımı, görsel efekt ve 3B görselleştirme de bu tarafta yaptığımız işler.',
+          'Yapay zekâyı konsept görseller ve kampanya varyasyonları için kullanıyoruz. Henüz çekilmemiş bir sahneyi önceden görmek için de.',
+          'Logo animasyonu ve başlık tasarımı da bu tarafta yaptığımız işler. Görsel efekt ve 3B görselleştirme de öyle.',
         ],
         capabilitiesTitle: 'Neler yapıyoruz',
         capabilities: [
@@ -228,17 +228,16 @@ export const copy: Record<Lang, Copy> = {
     },
     about: {
       eyebrow: 'Hakkında',
-      quote: 'Süslü değil; doğru.',
+      quote: 'Bazı deneyimler anlatılmaya değer.',
       lede: 'Solare Creative, Antalya’da bağımsız bir yaratıcı prodüksiyon stüdyosu.',
       body: [
         'Otel ve turizm sektörüne odaklanıyoruz. Bir otelin mimarisini, mutfağını, atmosferini ve misafirin orada yaşadıklarını film, fotoğraf ve sosyal medya içeriğiyle anlatıyoruz.',
-        'Abartmayı sevmiyoruz. Bir yer nasılsa onu en iyi ışıkta göstermeye çalışıyoruz.',
       ],
       pillarsTitle: 'Nasıl çalışıyoruz',
       pillars: [
-        { title: 'Otel odaklı', text: 'Otellerin nasıl işlediğini biliyoruz; çekimi günlük işleyişi aksatmadan planlarız.' },
-        { title: 'Baştan sona', text: 'Planlama, çekim, kurgu ve renk tek bir elden yönetilir.' },
-        { title: 'Tutarlı görünüm', text: 'Film, fotoğraf ve sosyal içerik birbirinin devamı gibi durur.' },
+        { title: 'Otel odaklı', text: 'Otellerin günlük akışını biliyor ve çekimi bu akışa göre kuruyoruz.' },
+        { title: 'Baştan sona aynı çizgi', text: 'İlk plandan son renk ayarına kadar her karede aynı bakışı koruyoruz.' },
+        { title: 'Ortak dil', text: 'Film, fotoğraf ve sosyal içerik yan yana geldiğinde aynı elden çıktıkları belli olur.' },
       ],
       processTitle: 'Çalışma süreci',
       processLede: 'İlk görüşmeden teslime kadar her adımı önceden konuşuruz.',
@@ -261,7 +260,7 @@ export const copy: Record<Lang, Copy> = {
     contact: {
       eyebrow: 'İletişim',
       title: 'Otelinizi konuşalım.',
-      lede: 'Birkaç cümlelik bir mesaj yeterli. Gerisini birlikte netleştiririz.',
+      lede: 'Bir mesajınız yeterli.',
       methodsTitle: 'Doğrudan ulaşın',
       emailLabel: 'E-posta',
       whatsappLabel: 'WhatsApp',
@@ -362,7 +361,7 @@ export const copy: Record<Lang, Copy> = {
       chime: 'Ayın sesi',
       comet: 'Kuyruklu yıldız',
     },
-    ring: 'SÜSLÜ DEĞİL; DOĞRU — SOLARE CREATIVE — ANTALYA — ',
+    ring: 'ATMOSFERİ YAKALIYORUZ — SOLARE CREATIVE — ANTALYA — ',
   },
 
   // ════════════════════════════════════════════════════════════ ENGLISH
@@ -399,7 +398,7 @@ export const copy: Record<Lang, Copy> = {
       motion: 'Motion',
       motionFull: 'Full',
       motionReduced: 'Reduced',
-      loading: 'Loading',
+      loading: 'Preparing the light',
       skipIntro: 'Skip intro',
       legal: 'Legal',
       privacy: 'Privacy',
@@ -415,7 +414,7 @@ export const copy: Record<Lang, Copy> = {
       write: 'Write',
     },
     home: {
-      tagline: 'Honest, not ornate.',
+      tagline: 'We capture atmosphere.',
       sub: 'Film, photography and social content for hotels and tourism, made in Antalya.',
       positioning: 'Hotel & Tourism Production · Antalya',
       overviewTitle: 'Solare Creative',
@@ -437,7 +436,7 @@ export const copy: Record<Lang, Copy> = {
           { title: 'Experience films', text: 'Short films on a restaurant, spa, suite or event space.' },
         ],
         deliverablesTitle: 'Delivery',
-        deliverables: ['4K master film', '30- and 15-second versions', 'Landscape, square and vertical edits', 'Subtitled versions for sound-off viewing'],
+        deliverables: ['4K master film', '30- and 15-second versions', 'Landscape and vertical edits'],
         workTitle: 'Projects',
         workNote: 'These are sample concepts. Real projects will be added as they are released.',
       },
@@ -483,8 +482,8 @@ export const copy: Record<Lang, Copy> = {
         eyebrow: 'Service',
         lede: 'AI-assisted visuals, motion graphics and CGI.',
         body: [
-          'We use AI for concept visuals, campaign variations and previsualising scenes that haven’t been shot yet. Anything made with AI is always labelled as such.',
-          'Logo animation, title design, visual effects and 3D visualisation are part of this work too.',
+          'We use AI for concept visuals and campaign variations. And to see a scene before it has been shot.',
+          'Logo animation and title design are part of this work too. So are visual effects and 3D visualisation.',
         ],
         capabilitiesTitle: 'What we do',
         capabilities: [
@@ -501,17 +500,16 @@ export const copy: Record<Lang, Copy> = {
     },
     about: {
       eyebrow: 'About',
-      quote: 'Honest, not ornate.',
+      quote: 'Some experiences deserve to be told.',
       lede: 'Solare Creative is an independent creative production studio in Antalya.',
       body: [
         'We focus on hotels and tourism. We show a hotel’s architecture, its kitchen, its atmosphere and what guests experience there, through film, photography and social content.',
-        'We don’t like to exaggerate. We try to show a place as it is, in its best light.',
       ],
       pillarsTitle: 'How we work',
       pillars: [
-        { title: 'Hotel-focused', text: 'We know how hotels run, and plan the shoot so daily operations carry on.' },
-        { title: 'Start to finish', text: 'Planning, shooting, editing and colour are run from one place.' },
-        { title: 'One look', text: 'Film, photography and social content look like they belong together.' },
+        { title: 'Hotel-focused', text: 'We know the daily rhythm of a hotel and build the shoot around it.' },
+        { title: 'One line, start to finish', text: 'From the first plan to the last colour pass, every frame keeps the same eye.' },
+        { title: 'A shared language', text: 'Put the film, the photos and the social content side by side and you can tell they come from the same hands.' },
       ],
       processTitle: 'How a project runs',
       processLede: 'Every step is agreed in advance, from the first call to delivery.',
@@ -534,7 +532,7 @@ export const copy: Record<Lang, Copy> = {
     contact: {
       eyebrow: 'Contact',
       title: 'Let’s talk about your hotel.',
-      lede: 'A few lines are enough. We’ll work out the rest together.',
+      lede: 'A message is enough.',
       methodsTitle: 'Reach us directly',
       emailLabel: 'E-mail',
       whatsappLabel: 'WhatsApp',
@@ -635,6 +633,6 @@ export const copy: Record<Lang, Copy> = {
       chime: 'The moon’s note',
       comet: 'A comet',
     },
-    ring: 'HONEST, NOT ORNATE — SOLARE CREATIVE — ANTALYA — ',
+    ring: 'WE CAPTURE ATMOSPHERE — SOLARE CREATIVE — ANTALYA — ',
   },
 };

@@ -10,7 +10,13 @@ import { bridge } from '../state/bridge';
 import { useStore } from '../state/store';
 import { blendPose, copyPose, farPose, introPose, journeyPose, makePose, planetFocusPose, planetStopPose, screenPose, type Pose } from './poses';
 
-const ALIGN_ANGLE = 1.25;
+/**
+ * Direction of the Hizala line around the sun: toward the lower left of the overview, where the
+ * frame is empty. Planets spread across the screen instead of stacking in depth, so Saturn's
+ * rings stay clear of their neighbours. Portrait screens have no room sideways, so the line
+ * turns a little further down there. (bridge.alignAngle can override it.)
+ */
+const alignAngle = (aspect: number) => (Number.isFinite(bridge.alignAngle) ? bridge.alignAngle : aspect < 0.9 ? 1.8 : 2.0);
 const routeKey = (r: Route) => (r.kind === 'planet' ? `p:${r.id}` : r.kind === 'project' ? `w:${r.slug}` : r.kind);
 
 const desired = makePose();
@@ -74,7 +80,7 @@ export function CameraRig() {
     const al = smoothstep(0, 1, bridge.align);
     for (const p of planets) {
       let a = p.orbit.angle + p.orbit.speed * bridge.orbitTime;
-      if (al > 0) a += shortestAngle(a, ALIGN_ANGLE) * al;
+      if (al > 0) a += shortestAngle(a, alignAngle(aspect)) * al;
       bridge.planetAngle[p.id] = a;
       bridge.planetPos[p.id].set(Math.cos(a) * p.orbit.radius, p.orbit.y * (1 - al), Math.sin(a) * p.orbit.radius);
     }

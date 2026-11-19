@@ -48,6 +48,8 @@ export const bridge = {
   eclipseX: 1,
   /** How much of the sun the Moon hides right now, 0..1 (labels stop darkening when it is covered). */
   eclipseCover: 0,
+  /** Override for the Hizala line direction (NaN = default). */
+  alignAngle: NaN,
   /** Opening shot: playback speed (0 = not running) and linear time 0..1. */
   introSpeed: 0,
   introT: 0,

@@ -95,9 +95,8 @@ function Lightbox({ index, onClose, onNav }: { index: number; onClose: () => voi
           </>
         )}
         <figcaption>
-          <span>{item.alt[lang]}</span>
           <span className="lightbox-count">
-            {c.gallery.counter} {index + 1} / {n}
+            {index + 1} / {n}
           </span>
         </figcaption>
       </figure>

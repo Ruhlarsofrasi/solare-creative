@@ -43,7 +43,8 @@ export function planetFrame(cfg: PlanetConfig) {
 
 /** Stop 0 — the whole system, sun high in frame, room for the wordmark below. */
 export function overviewPose(aspect: number, pose: Pose) {
-  const k = aspect < 1 ? 1 + (1 / aspect - 1) * 0.8 : 1;
+  // with Hizala on, step back a little so the whole line (out to Uranus) stays in frame
+  const k = (aspect < 1 ? 1 + (1 / aspect - 1) * 0.8 : 1) * (1 + 0.12 * smoother(clamp(bridge.align)));
   pose.pos.set(0, 38 * k, 124 * k);
   pose.target.set(0, aspect < 1 ? -20 * k : -12, 0);
   pose.fov = 40;

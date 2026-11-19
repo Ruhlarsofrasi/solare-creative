@@ -1459,6 +1459,17 @@ html:not([data-route='home']) .hud {
 .next-link:hover > .arrow {
   transform: translateX(12px);
 }
+/* "previous" moves the other way — these must come after the generic hover rules above */
+.next-link.next-prev:hover .next-title {
+  transform: translateX(-22px);
+}
+.next-link.next-prev:hover > .arrow {
+  transform: rotate(180deg) translateX(12px);
+}
+.next-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 
 /* about */
 .quote-section {
@@ -2480,10 +2491,25 @@ html:not([data-route='home']) .hud {
   transition: transform 1.2s var(--ease), filter 0.6s var(--ease);
 }
 .gallery-item:hover img,
-.gallery-item:hover video,
 .gallery-item:focus-visible img {
   transform: scale(1.025);
   filter: brightness(1.06);
+}
+/* a playing video is never scaled or filtered: resampling it every frame made it shimmer */
+.gallery-item video {
+  transition: none;
+}
+.gallery-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(250, 248, 245, 0.05);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+  pointer-events: none;
+}
+.gallery-item:hover::after {
+  opacity: 1;
 }
 .gallery-tag {
   position: absolute;

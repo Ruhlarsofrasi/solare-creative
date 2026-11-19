@@ -3,6 +3,8 @@ import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import { CanvasTexture, Color, DataTexture, DoubleSide, FrontSide, Group, Mesh, ShaderMaterial, SRGBColorSpace, TextureLoader, Vector3, VideoTexture } from 'three';
 import { planetIndex, type PlanetConfig } from '../config/planets';
 import type { Lang } from '../config/site';
+import gsap from 'gsap';
+import { galleryItems, galleryThumb } from '../content/gallery';
 import { projectBySlug, projectSeed, projectsOf, type Project } from '../content/projects';
 import { clamp, damp } from '../lib/math';
 import { bridge } from '../state/bridge';
@@ -234,6 +236,9 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
         uPresence: { value: 0.4 },
         uTexAspect: { value: 1 },
         uOpacity: { value: 1 },
+        uVideo2: { value: blank },
+        uTexAspect2: { value: 1 },
+        uMix: { value: 0 },
         uA: { value: new Color(project.palette[0]) },
         uB: { value: new Color(project.palette[1]) },
         uC: { value: new Color(project.palette[2]) },
@@ -242,6 +247,9 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
       },
       // a curved screen is seen from inside its arc too; the shader un-mirrors the back faces
       side: layout.curved ? DoubleSide : FrontSide,
+      // always in the blended pass (looks identical at full opacity): switching modes mid-fade
+      // forces a shader rebuild, which showed as a glitch
+      transparent: true,
     });
     // The frame sits a hair behind the picture. Polygon offset keeps the two from
     // fighting over the same depth at a distance — that fight was the flicker.
@@ -252,6 +260,7 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
       polygonOffset: true,
       polygonOffsetFactor: 2,
       polygonOffsetUnits: 2,
+      transparent: true,
     };
     const frameMat = new ShaderMaterial({ ...metal, side: DoubleSide });
     // curved backing: outside faces only, so from inside the arc the picture shows instead
@@ -338,6 +347,65 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
     };
   }, [still, mat, maxAniso]);
 
+  // Gallery screens: every few seconds, crossfade to a random frame (never the one the other screen shows)
+  useEffect(() => {
+    if (!isGalleryScreen(project.slug)) return;
+    let alive = true;
+    let timer = 0;
+    let current = project.poster ?? '';
+    showing.add(current);
+    const loader = new TextureLoader();
+    const cycle = () => {
+      if (!alive) return;
+      const pool = GALLERY_POOL.filter((src) => !showing.has(src));
+      const next = pool[Math.floor(Math.random() * pool.length)];
+      if (!next) return void (timer = window.setTimeout(cycle, 6000));
+      showing.add(next);
+      loader.load(
+        next,
+        (t) => {
+          if (!alive) {
+            showing.delete(next);
+            return t.dispose();
+          }
+          t.colorSpace = SRGBColorSpace;
+          t.anisotropy = maxAniso;
+          mat.uniforms.uVideo2.value = t;
+          mat.uniforms.uTexAspect2.value = t.image.width / Math.max(t.image.height, 1);
+          gsap.to(mat.uniforms.uMix, {
+            value: 1,
+            duration: 1.8,
+            ease: 'power2.inOut',
+            onComplete: () => {
+              if (!alive) return;
+              const old = mat.uniforms.uVideo.value as { dispose?: () => void };
+              mat.uniforms.uVideo.value = t;
+              mat.uniforms.uTexAspect.value = mat.uniforms.uTexAspect2.value;
+              mat.uniforms.uMix.value = 0;
+              mat.uniforms.uVideo2.value = blank;
+              if (old !== blank) old.dispose?.();
+              showing.delete(current);
+              current = next;
+              timer = window.setTimeout(cycle, 5000 + Math.random() * 4000);
+            },
+          });
+        },
+        undefined,
+        () => {
+          showing.delete(next);
+          timer = window.setTimeout(cycle, 6000);
+        },
+      );
+    };
+    timer = window.setTimeout(cycle, 3500 + Math.random() * 4000);
+    return () => {
+      alive = false;
+      window.clearTimeout(timer);
+      gsap.killTweensOf(mat.uniforms.uMix);
+      showing.delete(current);
+    };
+  }, [project.slug, project.poster, mat, maxAniso]);
+
   useEffect(
     () => () => {
       mat.dispose();
@@ -388,16 +456,7 @@ function Screen({ project, cfg, slot, seed }: { project: Project; cfg: PlanetCon
     const f = fade.current;
     g.visible = f > 0.002;
     g.scale.setScalar(0.94 + 0.06 * f);
-    // only blend while fading: fully shown screens stay in the opaque pass
-    const blending = f < 0.999;
-    for (const mm of [mat, frameMat, frameOuter]) {
-      mm.uniforms.uOpacity.value = f;
-      if (mm.transparent !== blending) {
-        mm.transparent = blending;
-        mm.depthWrite = !blending;
-        mm.needsUpdate = true;
-      }
-    }
+    for (const mm of [mat, frameMat, frameOuter]) mm.uniforms.uOpacity.value = f;
     if (!s.reducedMotion) g.position.y = layout.pos.y + Math.sin(t * 0.35 + seed * 20) * cfg.radius * 0.03;
     // publish the screen rectangle for camera framing + DOM match cuts
     let info = bridge.screens[project.slug];
@@ -484,10 +543,13 @@ const galleryScreen = (slug: string, file: string, palette: [string, string, str
     scope: { tr: [], en: [] },
     kind: 'still',
     palette,
-    poster: `${import.meta.env.BASE_URL}gallery/${file}.webp`,
+    poster: `${import.meta.env.BASE_URL}gallery/thumb/${file}.webp`,
   }) as Project;
 const GALLERY_SCREENS = [galleryScreen('gallery-a', 'g05', ['#f2c27a', '#5f8a7c', '#101412']), galleryScreen('gallery-b', 'g04', ['#f4efe6', '#8aa3b4', '#111315'])];
 const isGalleryScreen = (slug: string) => slug.startsWith('gallery-');
+/** Portrait frames the gallery screens rotate through (800 px versions — sharp at screen size, light on GPU memory). */
+const GALLERY_POOL = galleryItems.filter((i) => i.kind === 'image' && i.h > i.w).map(galleryThumb);
+const showing = new Set<string>();
 
 /** Monumental screens orbiting a planet — one per project of that destination. */
 export function Billboards({ cfg }: { cfg: PlanetConfig }) {

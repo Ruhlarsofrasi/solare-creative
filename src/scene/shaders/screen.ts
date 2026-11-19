@@ -74,6 +74,9 @@ uniform float uUseVideo;
 uniform float uPresence;
 uniform float uTexAspect;
 uniform float uOpacity;
+uniform sampler2D uVideo2;
+uniform float uTexAspect2;
+uniform float uMix;
 uniform vec3 uA;
 uniform vec3 uB;
 uniform vec3 uC;
@@ -96,6 +99,13 @@ void main(){
     vec2 s = r > 1.0 ? vec2(1.0, 1.0 / r) : vec2(r, 1.0);
     float drift = 0.955 + 0.02 * sin(uTime * 0.07 + uSeed * 9.0);
     col = texture2D(uVideo, (zuv - 0.5) * s * drift + 0.5).rgb;
+    // gallery screens crossfade to their next frame
+    if (uMix > 0.001) {
+      float r2 = uAspect / max(uTexAspect2, 0.01);
+      vec2 s2 = r2 > 1.0 ? vec2(1.0, 1.0 / r2) : vec2(r2, 1.0);
+      vec3 col2 = texture2D(uVideo2, (zuv - 0.5) * s2 * drift + 0.5).rgb;
+      col = mix(col, col2, smoothstep(0.0, 1.0, uMix));
+    }
   }
   vec4 ov = texture2D(uMap, uv);
   col = mix(col, ov.rgb, ov.a * 0.92);
@@ -132,7 +142,8 @@ varying vec3 vColor;
 varying float vTw;
 void main(){
   vColor = aColor;
-  float tw = 0.75 + 0.25 * sin(uTime * (0.6 + aPhase * 1.7) + aPhase * 40.0);
+  // slow, uneven twinkle (each star its own pace)
+  float tw = 0.78 + 0.22 * sin(uTime * (0.12 + aPhase * 0.3) + aPhase * 40.0);
   vTw = tw;
   vec4 mv = modelViewMatrix * vec4(position,1.0);
   gl_Position = projectionMatrix * mv;

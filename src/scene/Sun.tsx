@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import { AdditiveBlending, BackSide, DoubleSide, Group, Mesh, Quaternion, ShaderMaterial, Vector3 } from 'three';
 import { SUN_RADIUS } from '../config/planets';
-import { hash } from '../lib/math';
+import { hash, smoothstep } from '../lib/math';
 import { tierSettings } from '../lib/quality';
 import { audio } from '../audio/AudioEngine';
 import { bridge } from '../state/bridge';
@@ -45,7 +45,7 @@ export function Sun() {
     const shell = new ShaderMaterial({
       vertexShader: sunVertex,
       fragmentShader: shellFragment,
-      uniforms: { uTime: { value: 0 }, uFlare: { value: 0 }, uNorm: { value: Math.sqrt(1 - 1 / (SHELL * SHELL)) } },
+      uniforms: { uTime: { value: 0 }, uFlare: { value: 0 }, uNorm: { value: Math.sqrt(1 - 1 / (SHELL * SHELL)) }, uDim: { value: 1 } },
       side: BackSide,
       transparent: true,
       blending: AdditiveBlending,
@@ -54,7 +54,7 @@ export function Sun() {
     const cor = new ShaderMaterial({
       vertexShader: billboardVertex,
       fragmentShader: coronaFragment,
-      uniforms: { uTime: { value: 0 }, uSize: { value: CORONA_SIZE }, uEdge: { value: 1 }, uFlare: { value: 0 } },
+      uniforms: { uTime: { value: 0 }, uSize: { value: CORONA_SIZE }, uEdge: { value: 1 }, uFlare: { value: 0 }, uDim: { value: 1 } },
       defines: { OCT: 3 },
       transparent: true,
       blending: AdditiveBlending,
@@ -138,6 +138,10 @@ export function Sun() {
     mats.shell.uniforms.uFlare.value = bridge.flare;
     mats.cor.uniforms.uTime.value = st;
     mats.cor.uniforms.uFlare.value = bridge.flare;
+    // a total eclipse leaves almost no halo: the glow fades as the Moon covers the disc
+    const dim = 1 - 0.93 * smoothstep(0.35, 0.95, bridge.eclipseCover);
+    mats.cor.uniforms.uDim.value = dim;
+    mats.shell.uniforms.uDim.value = dim;
     for (const l of loops) {
       l.mat.uniforms.uTime.value = st;
       l.mat.uniforms.uFlare.value = bridge.flare;

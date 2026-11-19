@@ -16,6 +16,8 @@ const blank = new DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1);
 blank.needsUpdate = true;
 const loader = new TextureLoader();
 const cache = new Map<string, Texture>();
+/** Moons are drawn a little larger than their configured size so they read at a glance. */
+const MOON_SCALE = 1.25;
 let pending = 0;
 /** Planet maps still downloading or not yet uploaded to the GPU. */
 export const texturesPending = () => pending;
@@ -114,7 +116,7 @@ function Moon({ cfg, moon, index }: { cfg: PlanetConfig; moon: MoonConfig; index
   };
   return (
     <mesh ref={ref} material={mat} onClick={click}>
-      <sphereGeometry args={[moon.radius, 32, 32]} />
+      <sphereGeometry args={[moon.radius * MOON_SCALE, 32, 32]} />
     </mesh>
   );
 }

@@ -90,12 +90,13 @@ export function useJourneyInput() {
       }
     };
 
-    // touch: one vertical swipe = one stop
-    let touch: { id: number; y: number; done: boolean } | null = null;
+    // touch: one swipe = one stop. Up or left goes forward, down or right goes back
+    // (first-time visitors on phones tend to swipe sideways).
+    let touch: { id: number; x: number; y: number; done: boolean } | null = null;
     const down = (e: PointerEvent) => {
       if (e.pointerType !== 'touch' || !active() || onUi(e.target) || bridge.dragging) return;
       if (bridge.intro < 1) return skipIntro();
-      touch = { id: e.pointerId, y: e.clientY, done: false };
+      touch = { id: e.pointerId, x: e.clientX, y: e.clientY, done: false };
     };
     const move = (e: PointerEvent) => {
       if (e.pointerType !== 'touch') {
@@ -105,9 +106,13 @@ export function useJourneyInput() {
       }
       if (!touch || e.pointerId !== touch.id || touch.done || bridge.dragging) return;
       const dy = touch.y - e.clientY;
-      if (Math.abs(dy) > 46) {
+      const dx = touch.x - e.clientX;
+      if (Math.abs(dy) > 46 && Math.abs(dy) >= Math.abs(dx)) {
         touch.done = true;
         step(Math.sign(dy));
+      } else if (Math.abs(dx) > 46 && Math.abs(dx) > Math.abs(dy)) {
+        touch.done = true;
+        step(Math.sign(dx));
       }
     };
     const upEnd = (e: PointerEvent) => {

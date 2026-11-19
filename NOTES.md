@@ -3,12 +3,12 @@
 Bu dosya siteye dahil değildir (yayınlanmaz); yapılacak işlerin listesidir.
 
 ## Karar bekliyor
-- Galeri görselleri yapay zekâyla mı üretildi? (Dosya adları `hf_…`; Higgsfield olabilir.) Öyleyse marka kuralı gereği galeride bu açıkça belirtilmeli. Şu an galeri metni yalnızca "Seçilmiş kareler" diyor; gerçek çekim olduğunu iddia etmiyor.
-- g28 ve g29 Starbucks logosu gösteriyor. Kalsın mı?
+- Mimari ve Sosyal İçerik sayfalarının ilk paragrafı: kullanıcı alternatiflerden seçecek.
+- Sinematik Filmler ilk paragrafı: kullanıcı yeni cümle verecek.
 
 ## Bekleyen
 - Kural: sitede hiçbir otel adı kullanılmaz (kullanıcı onaylı adları verene kadar), görsel açıklamaları dahil.
-- Marka bilgisi (ChatGPT, 2026-11-19): FPV hizmeti yok; ekip büyüklüğü, müşteri, ödül, ekipman iddiası yok; onaylı cümle "Süslü değil; doğru."; reddedilenler: "Ajans gibi çalışmıyoruz…", "Karmaşayı sette bırakırız."
+- Marka bilgisi (ChatGPT, 2026-11-19): FPV hizmeti yok; ekip büyüklüğü, müşteri, ödül, ekipman iddiası yok; slogan "Atmosferi yakalıyoruz." ("Süslü değil; doğru." onaylanmamıştı); reddedilenler: "Ajans gibi çalışmıyoruz…", "Karmaşayı sette bırakırız."
 - Kural: görüntü kalitesini düşüren hiçbir değişiklik sorulmadan yapılmaz.
 - Müzik dosyasının adı tam olarak `public/audio/ambient.mp3` olmalı (bkz. `src/config/site.ts` → `audio.music`). Farklı adla site yerleşik sentez sesine döner.
 
