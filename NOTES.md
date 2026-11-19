@@ -3,7 +3,6 @@
 Bu dosya siteye dahil değildir (yayınlanmaz); yapılacak işlerin listesidir.
 
 ## Karar bekliyor
-- Mimari ve Sosyal İçerik sayfalarının ilk paragrafı: kullanıcı alternatiflerden seçecek.
 - Sinematik Filmler ilk paragrafı: kullanıcı yeni cümle verecek.
 
 ## Bekleyen

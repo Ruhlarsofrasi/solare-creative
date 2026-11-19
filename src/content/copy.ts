@@ -172,7 +172,7 @@ export const copy: Record<Lang, Copy> = {
         eyebrow: 'Hizmet',
         lede: 'Cephe, iç mekân ve hava çekimleriyle mimari film ve fotoğraf.',
         body: [
-          'Mimari yavaş çekilince anlaşılır. Doğru saati bekler, kamerayı sakin ve kontrollü hareket ettiririz.',
+          'Bir binayı en iyi anlatan şey ışığın ona nasıl düştüğüdür. Sabahın yumuşak ışığını da akşamın uzun gölgelerini de kadraja alıyoruz.',
           'Havadan lobiye, lobiden odaya geçerken izleyen kişi nerede olduğunu kaybetmez. Mekânı ilk kez gören biri bile yerini tarif edebilir.',
         ],
         capabilitiesTitle: 'Neler yapıyoruz',
@@ -191,7 +191,7 @@ export const copy: Record<Lang, Copy> = {
         eyebrow: 'Hizmet',
         lede: 'Reels, kısa video ve fotoğraf: sosyal medya için düzenli içerik.',
         body: [
-          'Sosyal medya hızlı tüketilir ama hızlı çekilmek zorunda değil. Dikey ekran için baştan planlanan, ana filmle aynı görünen içerikler üretiyoruz.',
+          'Kısa videonun kendi ritmi var. Kurguyu müziğe, kadrajı telefon ekranına göre kuruyoruz.',
           'Bir çekim gününden olabildiğince çok içerik çıkarmak için konuları ve formatları önceden belirleriz.',
         ],
         capabilitiesTitle: 'Neler yapıyoruz',
@@ -444,7 +444,7 @@ export const copy: Record<Lang, Copy> = {
         eyebrow: 'Service',
         lede: 'Architectural film and photography: façades, interiors and aerials.',
         body: [
-          'Architecture makes sense when it is filmed slowly. We wait for the right hour and keep the camera calm and controlled.',
+          'What tells a building’s story best is the way light falls on it. We frame the soft morning light and the long evening shadows alike.',
           'Moving from the air to the lobby and on to a room, the viewer never loses their place. Even someone seeing the building for the first time could find their way around.',
         ],
         capabilitiesTitle: 'What we do',
@@ -463,7 +463,7 @@ export const copy: Record<Lang, Copy> = {
         eyebrow: 'Service',
         lede: 'Reels, short video and photography: steady content for social media.',
         body: [
-          'Social media is watched fast, but it doesn’t have to be shot fast. We plan for the vertical screen from the start and keep it looking like the main film.',
+          'Short video has its own rhythm. We cut to the music and frame for the phone screen.',
           'To get as much as possible out of one shoot day, we decide the topics and formats in advance.',
         ],
         capabilitiesTitle: 'What we do',
